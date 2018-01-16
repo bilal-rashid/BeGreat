@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Basic-->
+    <color name="colorPrimary">#ffffff</color><!-- ok Only used in styles.xml -->
+    <color name="colorPrimaryDark">#002256</color> <!-- Toolbar Color -->
+    <color name="colorAccent">#000000</color> <!-- ok Only used in styles.xml -->
+    <color name="colorMain">#c82209</color>
+    <!--App Background-->
+    <color name="colorAppBG">#e6e6e6</color>
+    <color name="colorDividerLine">@color/colorMain</color>
+    <!--Tabs-->
+    <color name="colorTabs">#bababa</color>
+    <color name="colorTabsText">#000000</color>
+    <color name="colorTabsIndicator">@color/colorMain</color>
+    <!--Bars-->
+    <color name="colorToolBarText">#ffffff</color>
+    <color name="colorSnackBar">@color/colorPrimaryDark</color>
+    <color name="colorSnackBarText">@color/colorPrimary</color>
+    <!-- Spinner -->
+    <color name="colorSpinnerText">#002256</color>
+    <color name="colorSpinnerBG">#ffffff</color>
+    <color name="colorSpinnerLine">#bababa</color>
+    <!--Cart-->
+    <color name="colorCartItemBG">#ffffff</color>
+    <color name="colorCartItemText">#000000</color>
+    <color name="colorCartItemText2">@color/colorMain</color>
+    <color name="colorCartItemDivider">#000000</color>
+    <color name="colorCartIcon">#ffffff</color>
+    <color name="colorCrossIcon">#000000</color>
+    <color name="colorCartScreenText">#000000</color>
+    <color name="colorCartScreenText2">@color/colorMain</color>
+    <!--OrderCard-->
+    <color name="colorOrderCardBG">#ffffff</color> <!-- ok -->
+    <color name="colorOrderCardText">#000000</color>
+    <color name="colorOrderCardText2">@color/colorMain</color>
+    <color name="colorDividerLineOrders">#bababa</color>
+    <!--Drawer-->
+    <color name="colorDrawerText">#ffffff</color>
+    <color name="colorDrawerLine">@color/colorMain</color>
+    <color name="colorDrawerBG">#00ffffff</color>
+    <color name="colorDrawerIcon">#ffffff</color>
+    <!--Button-->
+    <color name="colorButtonCustomBG">@color/colorMain</color>
+    <color name="colorButtonCustom">#ffffff</color>
+    <color name="colorButtonTint">#c82209</color>
+    <color name="colorButtonTintUnChecked">#80c82209</color>
+    <color name="colorRadioButtonText">#002256</color>
+    <color name="colorRadioButtonTextDisabled">#80002256</color>
+    <!--Error Layout-->
+    <color name="colorErrorIcon">#bababa</color>
+    <color name="colorErrorText">#bababa</color>
+    <!-- Loading Dialog -->
+    <color name="colorLoader">@color/colorLoaderText</color>
+    <color name="colorLoaderText">#ffffff</color>
+    <color name="colorLoaderBG">#BF000000</color>
+    <color name="colorPaymentLoader">@color/colorPrimaryDark</color>
+    <!--Simple Dialog-->
+    <color name="colorSimpleDialogTitleText">#ffffff</color>
+    <color name="colorSimpleDialogText">#002256</color>
+    <!-- Dialog -->
+    <color name="colorDialogToolbar">@color/colorPrimaryDark</color>
+    <color name="colorDialogBG">#ffffff</color> <!-- ok -->
+    <color name="colorDialogToolbarText">#ffffff</color><!-- ok -->
+    <color name="colorDialogDivider">#000000</color><!-- ok -->
+    <color name="colorDialogText">#000000</color><!-- ok -->
+    <color name="colorDialogOrderVerificationText">#002256</color><!-- ok -->
+    <color name="colorOrderDialogBG">#d8d8d8</color>
+    <!-- Featured Item -->
+    <color name="colorFeaturedItemText">#ffffff</color>
+    <color name="colorFeaturedOverlayItem">#40000000</color>
+    <!-- Product Item -->
+    <color name="colorProductText">#ffffff</color>
+    <color name="colorProductOverlayItem">#40000000</color>
+    <!-- Category Item -->
+    <color name="colorCategoryText">#ffffff</color>
+    <color name="colorCategoryOverlayItem">#40000000</color>
+    <color name="colorCategoryIcon">#ffffff</color>
+    <!-- Branch Screen -->
+    <color name="colorBranchText">#000000</color>
+    <color name="colorButtonNextBranchScreen">#000000</color>
+    <color name="colorBranchDivider">#bababa</color>
+    <color name="colorButtonBranchScreen">@color/colorMain</color>
+    <!-- Welcome Screen -->
+    <color name="colorContinueAsGuest">#434241</color>
+    <!-- Profile Screen -->
+    <color name="colorProfileDivider">#bababa</color>
+    <color name="colorProfileHeadingText">#ffffff</color>
+    <color name="colorProfileText">#000000</color>
+    <color name="colorProfileIcon">#000000</color>
+    <color name="colorUserPlaceholderIcon">#ffffff</color>
+    <color name="colorUserBorder">#002256</color>
+    <color name="colorProfilePlaceholderIcon">#ffffff</color>
+    <color name="colorProfileBorder">#ffffff</color>
+    <color name="colorMessages">@color/colorMain</color> <!-- ok -->
+    <color name="colorRewards">@color/colorPrimary</color><!-- ok -->
+    <color name="colorOrders">#EECE65</color><!-- ok -->
+    <!-- Item Detail Screen -->
+    <color name="colorItemScreenHeadingText">#002256</color>
+    <color name="colorItemScreenTitleText">@color/colorMain</color>
+    <color name="colorItemScreenText">#ffffff</color>
+    <color name="colorAddonsText">#002256</color>
+    <color name="colorProductDetailOverlay">#80000000</color>
+    <color name="colorButtonQuantity">@color/colorMain</color>
+    <!-- Order Detail Screen -->
+    <color name="colorOrderDetailScreenTitleText">@color/colorMain</color>
+    <color name="colorOrderDetailScreenText">@color/colorRadioButtonText</color>
+    <!-- Feedback Screen -->
+    <color name="colorFeedbackText">@color/colorMain</color><!-- ok -->
+    <!-- Pay Screen -->
+    <color name="colorPayText">@color/colorMain</color>
+    <!-- Login Screen -->
+    <color name="colorLoginText">@color/colorMain</color>
+    <color name="colorForgotPasswordText">#000000</color>
+    <!-- Rewards Screen -->
+    <color name="colorRewardsText">@color/colorMain</color>
+    <!-- Payment Done -->
+    <color name="colorPaymentDoneMessage1Text">@color/colorMain</color>
+    <color name="colorPaymentTimeText">@color/colorMain</color>
+    <color name="colorPaymentDoneMessage2Text">@color/colorMain</color>
+    <color name="colorPaymentDoneOKIcon">#298c00</color>
+    <color name="colorPaymentDoneCrossIcon">#dd0000</color>
+
+    <!--grey colors-->
+    <color name="grey">#606060</color>
+    <color name="darkgrey">#424242</color>
+    <!-- circular Loader -->
+    <color name="cpv_barColor">#002256</color>
+    <color name="cpv_rimColor">#e6e6e6</color>
+    <color name="cpv_spinColor">#e6e6e6</color>
+    <color name="cpv_textColor">@color/colorMain</color>
+    <color name="cpv_unitColor">@color/colorMain</color>
+    <!-- Swipe to  Refresh Loader -->
+    <color name="color1">#c82209</color>
+    <color name="color2">#c82209</color>
+    <color name="color3">#c82209</color>
+    <color name="color4">#c82209</color>
+    <!-- Search bar -->
+    <color name="colorSearchBarText">@color/colorSearchBarContainerBG</color>
+    <color name="colorSearchBarContainerBG">@color/colorPrimaryDark</color>
+    <color name="colorSearchBarBG">@color/colorAppBG</color>
+    <color name="colorSearchBarIcon">@color/colorSearchBarText</color>
+
+    <color name="colorNotificationIcon">@color/colorPrimaryDark</color>
+
+    <!-- stepper -->
+    <color name="stpi_circleColor">#b3bdc2</color>
+    <color name="stpi_indicatorColor">#00b47c</color>
+    <color name="stpi_lineColor">#b3bdc2</color>
+    <color name="stpi_lineDoneColor">#00b47c</color>
+    <!--Order tracking -->
+    <color name="tracking_stpi_circleColor">#b3bdc2</color>
+    <color name="tracking_stpi_indicatorColor">@color/colorPrimaryDark</color>
+    <color name="tracking_stpi_lineColor">#b3bdc2</color>
+    <color name="tracking_stpi_lineDoneColor">@color/colorPrimaryDark</color>
+    <!--end-->
+
+    <color name="reset_password_icon">@color/colorPrimaryDark</color>
+    <!-- Toolbar icon -->
+    <color name="colorToolbarIcon">@color/colorToolBarText</color>
+
+    <!-- Overlay -->
+    <color name="bright_overlay">#21ffffff</color>
+</resources>
