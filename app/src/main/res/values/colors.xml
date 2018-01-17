@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Basic-->
-    <color name="colorPrimary">#ffffff</color><!-- ok Only used in styles.xml -->
-    <color name="colorPrimaryDark">#002256</color> <!-- Toolbar Color -->
-    <color name="colorAccent">#000000</color> <!-- ok Only used in styles.xml -->
+    <color name="colorPrimary">#4db6ac</color><!-- ok Only used in styles.xml -->
+    <color name="colorPrimaryDark">#00867d</color> <!-- Toolbar Color -->
+    <color name="colorAccent">#82e9de</color> <!-- ok Only used in styles.xml -->
     <color name="colorMain">#c82209</color>
     <!--App Background-->
     <color name="colorAppBG">#e6e6e6</color>
+    <color name="colorWhite">#ffffff</color>
     <color name="colorDividerLine">@color/colorMain</color>
     <!--Tabs-->
     <color name="colorTabs">#bababa</color>
@@ -160,4 +161,17 @@
 
     <!-- Overlay -->
     <color name="bright_overlay">#21ffffff</color>
+    <color name="card_expense_color">#EF5350</color>
+    <color name="card_expense_color_pressed">#b61827</color>
+    <color name="card_income_color">@color/colorPrimary</color>
+    <color name="card_income_color_pressed">@color/colorPrimaryDark</color>
+    <color name="card_saving_color">#EF9A9A</color>
+    <color name="card_saving_color_pressed">#ba6b6c</color>
+    <color name="card_purchase_color">#CE93D8</color>
+    <color name="card_purchase_color_pressed">#9c64a6</color>
+    <color name="card_setting_color">#FF8A65</color>
+    <color name="card_delete_color">#f5754d</color>
+    <color name="card_setting_color_pressed">#c75b39</color>
+    <color name="card_reports_color">#80CBC4</color>
+    <color name="card_dummy_color_pressed">#4f9a94</color>
 </resources>
