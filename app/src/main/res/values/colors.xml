@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Basic-->
-    <color name="colorPrimary">#4db6ac</color><!-- ok Only used in styles.xml -->
-    <color name="colorPrimaryDark">#00867d</color> <!-- Toolbar Color -->
-    <color name="colorAccent">#82e9de</color> <!-- ok Only used in styles.xml -->
+    <color name="colorPrimary">#5cc5f4</color><!-- ok Only used in styles.xml -->
+    <color name="colorPrimaryDark">#0AA8EF</color> <!-- Toolbar Color -->
+    <color name="colorAccent">#93d4f1</color> <!-- ok Only used in styles.xml -->
     <color name="colorMain">#c82209</color>
     <!--App Background-->
     <color name="colorAppBG">#e6e6e6</color>
