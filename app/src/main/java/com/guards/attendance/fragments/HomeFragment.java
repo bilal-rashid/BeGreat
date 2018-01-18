@@ -24,8 +24,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-//        if (!EventBus.getDefault().isRegistered(this))
-//            EventBus.getDefault().register(this);
     }
     @Override
     public void onAttach(Context context) {

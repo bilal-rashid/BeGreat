@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.guards.attendance.fragments.HomeFragment;
+import com.guards.attendance.fragments.LoginFragment;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.Constants;
@@ -30,7 +31,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 fragment.setArguments(bundle);
             addFragment(fragment);
         } else {
-            addFragment(new HomeFragment());
+            addFragment(new LoginFragment());
         }
 
     }
@@ -41,7 +42,6 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle(" ");
-        ActivityUtils.centerToolbarTitle(mToolbar,true);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -96,10 +96,14 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
     public void setTitle(String title, boolean isHome) {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title);
-            if (isHome)
+            if (isHome) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            else
+                ActivityUtils.centerToolbarTitle(mToolbar,false);
+            }
+            else {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                ActivityUtils.centerToolbarTitle(mToolbar,true);
+            }
         }
     }
 }

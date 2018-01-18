@@ -79,6 +79,9 @@ public class ActivityUtils {
             if(padding) {
                 titleView.setPadding(0, 0, AppUtils.dpToPx(65), 0);
             }
+            else {
+                titleView.setPadding(0, 0, AppUtils.dpToPx(20), 0);
+            }
             if (titleView.getLayoutParams() instanceof Toolbar.LayoutParams) {
                 final Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleView.getLayoutParams();
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;

@@ -7,8 +7,8 @@ package com.guards.attendance.utils;
 public class Constants {
     public static final String FRAGMENT_NAME = "fragment name";
     public static final String DATA = "data";
-    public static final String USER = "user";
-    public static final String USER_AVAILABLE = "user available";
+    public static final String USER_ADMIN = "user_admin";
+    public static final String USER_GUARD= "user_guard";
 
     public static final String USER_ONE_SIGNAL_ID = "user_one_signal_id";
     public static final int ORDERS_VERIFICATION_TIME = 60; // Seconds
