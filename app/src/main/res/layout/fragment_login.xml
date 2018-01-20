@@ -29,7 +29,7 @@
             style="@style/myEditText"
             android:hint="Password"
             android:imeOptions="actionDone"
-            android:inputType="numberPassword" />
+            android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
     <Button

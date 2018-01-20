@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
+import com.guards.attendance.utils.LoginUtils;
 
 /**
  * Created by Bilal Rashid on 1/18/2018.
@@ -51,7 +53,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 Login();
                 break;
             case R.id.button_signup:
-//                signup screen
+                ActivityUtils.startActivity(getActivity(), FrameActivity.class,
+                        SignupFragment.class.getName(), null);
                 break;
         }
 
@@ -71,6 +74,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         }
         mHolder.inputLayoutPassword.setError(null);
         mHolder.inputLayoutPassword.setErrorEnabled(false);
+        if(LoginUtils.authenticateAdmin(getContext(),mHolder.usernameEditText.getText().toString(),
+                mHolder.passwordEditText.getText().toString())){
+            LoginUtils.loginAdmin(getContext());
+            Toast.makeText(getContext(),"Admin Logged in",Toast.LENGTH_SHORT).show();
+            ActivityUtils.startActivity(getActivity(), FrameActivity.class,
+                    AdminHomeFragment.class.getName(), null);
+            getActivity().finish();
+        }else if (LoginUtils.authenticateGuard(getContext(),mHolder.usernameEditText.getText().toString(),
+                mHolder.passwordEditText.getText().toString())){
+            LoginUtils.loginGuard(getContext());
+            Toast.makeText(getContext(),"Guard Logged in",Toast.LENGTH_SHORT).show();
+            ActivityUtils.startActivity(getActivity(), FrameActivity.class,
+                    GuardHomeFragment.class.getName(), null);
+            getActivity().finish();
+        }else {
+            Toast.makeText(getContext(),"Invalid username or password",Toast.LENGTH_SHORT).show();
+        }
+
     }
     public static class ViewHolder {
         TextInputEditText usernameEditText;

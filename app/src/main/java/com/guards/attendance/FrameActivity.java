@@ -8,16 +8,23 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.guards.attendance.dialog.SimpleDialog;
+import com.guards.attendance.fragments.AdminHomeFragment;
+import com.guards.attendance.fragments.GuardHomeFragment;
 import com.guards.attendance.fragments.HomeFragment;
 import com.guards.attendance.fragments.LoginFragment;
+import com.guards.attendance.fragments.SignupFragment;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.Constants;
+import com.guards.attendance.utils.LoginUtils;
 
 public class FrameActivity extends AppCompatActivity implements ToolbarListener {
 
     private Toolbar mToolbar;
+    private SimpleDialog mSimpleDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +38,13 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
                 fragment.setArguments(bundle);
             addFragment(fragment);
         } else {
-            addFragment(new LoginFragment());
+            if(LoginUtils.isAdminUserLogin(this)){
+                addFragment(new AdminHomeFragment());
+            }else if (LoginUtils.isGuardUserLogin(this)){
+                addFragment(new GuardHomeFragment());
+            }else {
+                addFragment(new LoginFragment());
+            }
         }
 
     }
@@ -52,8 +65,22 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
     public void onBackPressed() {
 
         if (isTaskRoot()) {
-            FrameActivity.this.finish();
-//            ActivityUtils.startHomeActivity(this, HomeActivity.class, HomeFragment.class.getName());
+            mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
+                    getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switch (view.getId()) {
+                        case R.id.button_positive:
+                            mSimpleDialog.dismiss();
+                            FrameActivity.this.finish();
+                            break;
+                        case R.id.button_negative:
+                            mSimpleDialog.dismiss();
+                            break;
+                    }
+                }
+            });
+            mSimpleDialog.show();
         }
         else {
             FrameActivity.this.finish();

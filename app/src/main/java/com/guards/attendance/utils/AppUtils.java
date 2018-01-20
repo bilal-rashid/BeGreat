@@ -3,8 +3,22 @@ package com.guards.attendance.utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
+
+import com.guards.attendance.R;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Bilal Rashid on 1/16/2018.
@@ -74,4 +88,46 @@ public class AppUtils {
 //            Log.d("SQLiteException", ex.getMessage());
 //        }
 //        Log.d("TAAAG",smsBuilder.toString());
+    public static int getImageOrientation(String imagePath){
+        int rotate = 0;
+        try {
+
+            File imageFile = new File(imagePath);
+            ExifInterface exif = new ExifInterface(
+                    imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rotate;
+    }
+    public static void showSnackBar(View v, String message) {
+        if (v != null && !TextUtils.isEmpty(message)) {
+            Snackbar snackbar = Snackbar.make(v, message, Snackbar.LENGTH_SHORT);
+            snackbar.getView().setBackgroundResource(R.color.colorSnackBar);
+            View view = snackbar.getView();
+            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            else
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+            tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorSnackBarText));
+            snackbar.show();
+        }
+    }
+
 }
