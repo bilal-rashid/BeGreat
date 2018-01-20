@@ -23,6 +23,7 @@
     <dimen name="app_body_1">15sp</dimen>
     <dimen name="app_caption">13sp</dimen>
     <dimen name="app_button">15sp</dimen>
+    <dimen name="card_radius">5dp</dimen>
 
     <dimen name="payment_cover_width">110dp</dimen>
     <dimen name="payment_cover_height">120dp</dimen>

@@ -89,7 +89,7 @@
     <color name="colorProfileText">#000000</color>
     <color name="colorProfileIcon">#000000</color>
     <color name="colorUserPlaceholderIcon">#ffffff</color>
-    <color name="colorUserBorder">#002256</color>
+    <color name="colorUserBorder">@color/colorPrimaryDark</color>
     <color name="colorProfilePlaceholderIcon">#ffffff</color>
     <color name="colorProfileBorder">#ffffff</color>
     <color name="colorMessages">@color/colorMain</color> <!-- ok -->
@@ -167,6 +167,12 @@
     <color name="card_income_color_pressed">@color/colorPrimaryDark</color>
     <color name="card_saving_color">#EF9A9A</color>
     <color name="card_saving_color_pressed">#ba6b6c</color>
+    <color name="card_alarm_color">#EF5350</color>
+    <color name="card_alarm_color_pressed">#b61827</color>
+    <color name="card_checkin_color">@color/colorPrimary</color>
+    <color name="card_checkin_color_pressed">@color/colorPrimaryDark</color>
+    <color name="card_checkout_color">#009688</color>
+    <color name="card_checkout_color_pressed">#00675b</color>
     <color name="card_purchase_color">#CE93D8</color>
     <color name="card_purchase_color_pressed">#9c64a6</color>
     <color name="card_setting_color">#FF8A65</color>

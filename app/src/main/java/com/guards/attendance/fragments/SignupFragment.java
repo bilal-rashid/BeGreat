@@ -15,20 +15,15 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.models.User;
 import com.guards.attendance.toolbox.ToolbarListener;
-import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.LoginUtils;
 
@@ -75,9 +70,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                 Signup();
                 break;
             case R.id.image_user:
-                Glide.with(this)
-                        .load(R.drawable.user)
-                        .into(mHolder.userImage);
+                mHolder.userImage.setImageResource(R.drawable.user);
                 handleCamera();
                 break;
         }
