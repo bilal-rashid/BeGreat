@@ -6,6 +6,7 @@
     <string name="admin_password">12345</string>
     <string name="err_image_not_selected">"You haven't picked a profile image"</string>
     <string name="msg_exit">Are you sure you want to exit?</string>
+    <string name="msg_alarm">Send Emergency bell to Admin?</string>
     <string name="msg_checkin">Are you sure you want to Checkin? (you will not be able to checkin again for this date)</string>
     <string name="msg_checkout">Are you sure you want to Checkout? (you will not be able to checkout again for this date)</string>
     <string name="button_cancel">Cancel</string>

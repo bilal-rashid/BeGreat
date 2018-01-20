@@ -75,6 +75,21 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.card_alarm:
+                mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_alarm),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
                 break;
             case R.id.card_checkin:
                 mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkin),
