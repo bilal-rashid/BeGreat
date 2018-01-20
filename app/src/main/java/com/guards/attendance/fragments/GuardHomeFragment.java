@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.guards.attendance.R;
+import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.User;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.AppUtils;
@@ -28,6 +29,7 @@ import com.guards.attendance.utils.LoginUtils;
 public class GuardHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
     private ViewHolder mHolder;
     private User mUser;
+    private SimpleDialog mSimpleDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,13 +75,44 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.card_alarm:
-                mHolder.alarmCard.setEnabled(false);
-//                mHolder.alarmCard.setOnTouchListener(null);
-                mHolder.alarmCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
                 break;
             case R.id.card_checkin:
+                mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkin),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mHolder.checkinCard.setEnabled(false);
+                                mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                                mSimpleDialog.dismiss();
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
                 break;
             case R.id.card_checkout:
+                mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkout),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mHolder.checkoutCard.setEnabled(false);
+                                mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                                mSimpleDialog.dismiss();
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
                 break;
         }
     }
