@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.User;
 import com.guards.attendance.toolbox.ToolbarListener;
+import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.LoginUtils;
 
@@ -66,14 +68,35 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         mHolder.alarmCard.setOnTouchListener(this);
         mHolder.checkinCard.setOnTouchListener(this);
         mHolder.checkoutCard.setOnTouchListener(this);
+        mHolder.logoutCard.setOnTouchListener(this);
 
         mHolder.alarmCard.setOnClickListener(this);
         mHolder.checkinCard.setOnClickListener(this);
         mHolder.checkoutCard.setOnClickListener(this);
+        mHolder.logoutCard.setOnClickListener(this);
     }
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.card_logout:
+                mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_logout),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                LoginUtils.logout(getContext());
+                                ActivityUtils.startHomeActivity(getContext(), FrameActivity.class,null);
+                                mSimpleDialog.dismiss();
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+                mSimpleDialog.show();
+                break;
             case R.id.card_alarm:
                 mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_alarm),
                         getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
@@ -139,6 +162,10 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 animate(view, motionEvent, ContextCompat.getColor(getActivity(), R.color.card_alarm_color),
                         ContextCompat.getColor(getActivity(), R.color.card_alarm_color_pressed));
                 break;
+            case R.id.card_logout:
+                animate(view, motionEvent, ContextCompat.getColor(getActivity(), R.color.card_logout_color),
+                        ContextCompat.getColor(getActivity(), R.color.card_logout_color_pressed));
+                break;
             case R.id.card_checkin:
                 animate(view, motionEvent, ContextCompat.getColor(getActivity(), R.color.card_checkin_color),
                         ContextCompat.getColor(getActivity(), R.color.card_checkin_color_pressed));
@@ -172,7 +199,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     public static class ViewHolder {
         ImageView profileImage;
         TextView usernameText, empCodeText;
-        CardView alarmCard, checkinCard, checkoutCard;
+        CardView alarmCard, checkinCard, checkoutCard,logoutCard;
         public ViewHolder(View view) {
             profileImage = (ImageView) view.findViewById(R.id.image_profile);
             usernameText = (TextView) view.findViewById(R.id.text_user_name);
@@ -181,6 +208,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
             alarmCard = (CardView) view.findViewById(R.id.card_alarm);
             checkinCard = (CardView) view.findViewById(R.id.card_checkin);
             checkoutCard = (CardView) view.findViewById(R.id.card_checkout);
+            logoutCard = (CardView) view.findViewById(R.id.card_logout);
         }
 
     }

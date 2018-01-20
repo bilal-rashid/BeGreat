@@ -160,6 +160,8 @@
     <color name="colorToolbarIcon">@color/colorToolBarText</color>
 
     <!-- Overlay -->
+    <color name="card_logout_color">#FF8A65</color>
+    <color name="card_logout_color_pressed">#c75b39</color>
     <color name="bright_overlay">#21ffffff</color>
     <color name="card_expense_color">#EF5350</color>
     <color name="card_expense_color_pressed">#b61827</color>

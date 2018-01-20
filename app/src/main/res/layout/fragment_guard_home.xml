@@ -145,7 +145,6 @@
                 android:layout_marginStart="@dimen/spacing_large"
                 android:layout_marginEnd="@dimen/spacing_large"
                 android:layout_marginTop="@dimen/spacing_large"
-                android:layout_marginBottom="@dimen/spacing_large"
                 app:cardBackgroundColor="@color/card_alarm_color"
                 app:cardCornerRadius="@dimen/card_radius">
                 <LinearLayout
@@ -163,6 +162,39 @@
                         android:layout_height="wrap_content" />
                     <ImageView
                         android:src="@drawable/alarm"
+                        android:layout_marginStart="@dimen/spacing_large"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="45dp" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:layout_marginStart="@dimen/spacing_double_extra_large"
+                android:layout_marginEnd="@dimen/spacing_double_extra_large"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/spacing_large"
+                app:cardBackgroundColor="@color/card_logout_color"
+                app:cardCornerRadius="@dimen/card_radius">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="60dp">
+                    <TextView
+                        android:textColor="@color/colorSpinnerBG"
+                        android:textSize="@dimen/app_title"
+                        android:text="Logout"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:layout_height="wrap_content" />
+                    <ImageView
+                        android:src="@drawable/logout"
                         android:layout_marginStart="@dimen/spacing_large"
                         android:layout_width="0dp"
                         android:layout_weight="1"
