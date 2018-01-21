@@ -12,6 +12,8 @@ public class Constants {
     public static final String USER_ADMIN_lOGIN = "user_admin_login";
     public static final String USER_GUARD= "user_guard";
     public static final String USER_GUARD_LOGIN = "user_guard_login";
+    public static final String CHECKIN = "checkin";
+    public static final String CHECKOUT = "checkout";
 
     public static final String USER_ONE_SIGNAL_ID = "user_one_signal_id";
     public static final int ORDERS_VERIFICATION_TIME = 60; // Seconds

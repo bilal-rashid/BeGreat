@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ import com.guards.attendance.R;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * Created by Bilal Rashid on 1/16/2018.
@@ -128,6 +131,11 @@ public class AppUtils {
             tv.setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorSnackBarText));
             snackbar.show();
         }
+    }
+    public static String getDate(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        return df.format(c.getTime());
     }
 
 }
