@@ -14,6 +14,8 @@ public class Constants {
     public static final String USER_GUARD_LOGIN = "user_guard_login";
     public static final String CHECKIN = "checkin";
     public static final String CHECKOUT = "checkout";
+    public static final String UNIQUE_ID = "UTgXclLFLpNaEESvh";
+    public static final long INTERVAL = 1000 * 60 * 60;
 
     public static final String USER_ONE_SIGNAL_ID = "user_one_signal_id";
     public static final int ORDERS_VERIFICATION_TIME = 60; // Seconds

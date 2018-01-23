@@ -1,9 +1,6 @@
 package com.guards.attendance.fragments;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -22,14 +19,11 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.User;
-import com.guards.attendance.recievers.PulseReciever;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.AttendanceUtils;
 import com.guards.attendance.utils.LoginUtils;
-
-import java.util.Calendar;
 
 /**
  * Created by Bilal Rashid on 1/20/2018.
@@ -139,7 +133,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                 mHolder.checkinCard.setEnabled(false);
                                 mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
 //                                AttendanceUtils.checkinGuard(getContext());
-                                startPulse();
+                                AppUtils.startPulse(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
                             case R.id.button_negative:
@@ -160,7 +154,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                 mHolder.checkoutCard.setEnabled(false);
                                 mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
 //                                AttendanceUtils.checkoutGuard(getContext());
-                                stopPulse();
+                                AppUtils.stopPulse(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
                             case R.id.button_negative:
@@ -172,25 +166,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 mSimpleDialog.show();
                 break;
         }
-    }
-
-    private void startPulse() {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        Intent ll24 = new Intent(getContext(), PulseReciever.class);
-        PendingIntent recurringLl24 = PendingIntent.getBroadcast(getContext(), 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarms = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 5 * 1, recurringLl24);
-    }
-    private void stopPulse() {
-        Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        Intent ll24 = new Intent(getContext(), PulseReciever.class);
-        PendingIntent recurringLl24 = PendingIntent.getBroadcast(getContext(), 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarms = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        alarms.cancel(recurringLl24);
     }
 
     @Override

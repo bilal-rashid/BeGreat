@@ -1,6 +1,9 @@
 package com.guards.attendance.utils;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.ExifInterface;
@@ -11,6 +14,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,6 +22,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.guards.attendance.R;
+import com.guards.attendance.recievers.PulseReciever;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,10 +143,42 @@ public class AppUtils {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         return df.format(c.getTime());
     }
+    public static String getDateAndTime(){
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(c.getTime());
+    }
     public static void vibrate(Context context){
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(1000);
+    }
+    public static void sendSMS(String phoneNo, String msg) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, null, null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public static void startPulse(Context context) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Intent ll24 = new Intent(context, PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.INTERVAL,
+                Constants.INTERVAL, recurringLl24);
+    }
+    public static void stopPulse(Context context) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Intent ll24 = new Intent(context, PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarms.cancel(recurringLl24);
     }
 
 }
