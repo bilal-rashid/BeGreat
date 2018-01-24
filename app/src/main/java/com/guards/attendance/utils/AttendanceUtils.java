@@ -1,10 +1,8 @@
 package com.guards.attendance.utils;
 
 import android.content.Context;
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import com.guards.attendance.enumerations.StatusEnum;
+import com.guards.attendance.models.Packet;
 
 /**
  * Created by Bilal Rashid on 1/21/2018.
@@ -28,5 +26,30 @@ public class AttendanceUtils {
     }
     public static boolean isGuardCheckout(Context context){
         return  PrefUtils.getBoolean(context,getCheckoutKey(),false);
+    }
+    public static void sendCheckin(Context context){
+        Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
+                StatusEnum.CHECKIN.getName(),AppUtils.getDateAndTime());
+        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+    }
+    public static void sendCheckout(Context context){
+        Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
+                StatusEnum.CHECKOUT.getName(),AppUtils.getDateAndTime());
+        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+    }
+    public static void sendEmergency(Context context){
+        Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
+                StatusEnum.EMERGENCY.getName(),AppUtils.getDateAndTime());
+        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+    }
+    public static void sendResponded(Context context){
+        Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
+                StatusEnum.RESPONSE.getName(),AppUtils.getDateAndTime());
+        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+    }
+    public static void sendNotResponded(Context context){
+        Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
+                StatusEnum.NO_RESPONSE.getName(),AppUtils.getDateAndTime());
+        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
     }
 }

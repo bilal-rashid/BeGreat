@@ -69,6 +69,18 @@ public class ActivityUtils {
         intent.putExtra(Constants.DATA, bundle);
         context.startActivity(intent);
     }
+    public static void startAlarmActivity(Context context, Class<?> class_, String fragmentName, Bundle bundle, boolean isUpdateCurrent) {
+        Intent intent = new Intent(context, class_);
+        if (isUpdateCurrent) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.putExtra(Constants.FRAGMENT_NAME, fragmentName);
+        intent.putExtra(Constants.DATA, bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(intent);
+    }
     public static void centerToolbarTitle(@NonNull final Toolbar toolbar, Boolean padding) {
         final CharSequence title = toolbar.getTitle();
         final ArrayList<View> outViews = new ArrayList<>(1);

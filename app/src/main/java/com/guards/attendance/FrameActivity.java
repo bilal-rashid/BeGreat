@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.fragments.AdminHomeFragment;
+import com.guards.attendance.fragments.AlarmFragment;
 import com.guards.attendance.fragments.GuardHomeFragment;
 import com.guards.attendance.fragments.HomeFragment;
 import com.guards.attendance.fragments.LoginFragment;
@@ -65,22 +66,28 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
     public void onBackPressed() {
 
         if (isTaskRoot()) {
-            mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
-                    getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    switch (view.getId()) {
-                        case R.id.button_positive:
-                            mSimpleDialog.dismiss();
-                            FrameActivity.this.finish();
-                            break;
-                        case R.id.button_negative:
-                            mSimpleDialog.dismiss();
-                            break;
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+            if(fragment instanceof AlarmFragment){
+//                FrameActivity.this.finish();
+//                ActivityUtils.startHomeActivity(this, FrameActivity.class,null);
+            }else {
+                mSimpleDialog = new SimpleDialog(this, null, getString(R.string.msg_exit),
+                        getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switch (view.getId()) {
+                            case R.id.button_positive:
+                                mSimpleDialog.dismiss();
+                                FrameActivity.this.finish();
+                                break;
+                            case R.id.button_negative:
+                                mSimpleDialog.dismiss();
+                                break;
+                        }
                     }
-                }
-            });
-            mSimpleDialog.show();
+                });
+                mSimpleDialog.show();
+            }
         }
         else {
             FrameActivity.this.finish();
