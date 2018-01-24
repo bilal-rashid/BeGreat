@@ -22,7 +22,6 @@ import com.guards.attendance.models.User;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
-import com.guards.attendance.utils.AttendanceUtils;
 import com.guards.attendance.utils.LoginUtils;
 
 /**
@@ -57,12 +56,16 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         if(mUser.image_path.equals("null")){
             mHolder.profileImage.setImageResource(R.drawable.user);
         }else {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(AppUtils.getImageOrientation(mUser.image_path));
-            Bitmap bitmap = BitmapFactory.decodeFile(mUser.image_path);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                    bitmap.getHeight(), matrix, true);
-            mHolder.profileImage.setImageBitmap(rotatedBitmap);
+            try {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(AppUtils.getImageOrientation(mUser.image_path));
+                Bitmap bitmap = BitmapFactory.decodeFile(mUser.image_path);
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                        bitmap.getHeight(), matrix, true);
+                mHolder.profileImage.setImageBitmap(rotatedBitmap);
+            }catch (Exception e){
+                mHolder.profileImage.setImageResource(R.drawable.user);
+            }
         }
         mHolder.empCodeText.setText(mUser.employee_code);
         mHolder.usernameText.setText(mUser.username);
