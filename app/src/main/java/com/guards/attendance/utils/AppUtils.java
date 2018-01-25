@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -179,6 +180,24 @@ public class AppUtils {
         PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarms.cancel(recurringLl24);
+    }
+    public static void changeProfile(Context context) {
+        AudioManager am;
+        am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+//For Normal mode
+        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
+    }
+    public static void IncreaseSound(Context context) {
+        AudioManager am;
+        am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
+    }
+    public static void playSound(Context context){
+//        final MediaPlayer mp = MediaPlayer.create(context, R.raw.buzzer);
+//        mp.start();
+//        mp.setVolume(100,100);
     }
 
 }

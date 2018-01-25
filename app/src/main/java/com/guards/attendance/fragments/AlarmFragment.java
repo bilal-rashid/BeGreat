@@ -1,8 +1,10 @@
 package com.guards.attendance.fragments;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
+import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.AttendanceUtils;
 
 import in.shadowfax.proswipebutton.ProSwipeButton;
@@ -27,6 +30,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
 
     private ViewHolder mHolder;
     private Handler mHandler;
+    MediaPlayer mediaPlayer;
     public int count;
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -37,6 +41,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
                 if(count > 10){
                     mHolder.proSwipeBtn.showResultIcon(false);
                     AttendanceUtils.sendNotResponded(getContext());
+                    mediaPlayer.stop();
                     getActivity().finish();
                     Log.d("TAAAG","FINISGED");
                 }
@@ -70,9 +75,14 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
         count = 0;
         mHandler = new Handler();
         mHandler.postDelayed(mRunnable, 500);
+        AppUtils.IncreaseSound(getContext());
+        mediaPlayer = MediaPlayer.create(getContext(), Settings.System.DEFAULT_ALARM_ALERT_URI);
+        mediaPlayer.setVolume(100,100);
+        mediaPlayer.start();
     }
     @Override
     public void onSwipeConfirm() {
+        mediaPlayer.stop();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
