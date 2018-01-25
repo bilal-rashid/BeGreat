@@ -16,11 +16,13 @@ import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AttendanceUtils;
 
+import in.shadowfax.proswipebutton.ProSwipeButton;
+
 /**
  * Created by Bilal Rashid on 1/24/2018.
  */
 
-public class AlarmFragment extends Fragment implements View.OnClickListener {
+public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeListener {
 
 
     private ViewHolder mHolder;
@@ -33,7 +35,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
                 mHandler.removeCallbacks(mRunnable);
                 count++;
                 if(count > 10){
-                    mHolder.button.setEnabled(false);
+                    mHolder.proSwipeBtn.showResultIcon(false);
                     AttendanceUtils.sendNotResponded(getContext());
                     getActivity().finish();
                     Log.d("TAAAG","FINISGED");
@@ -58,34 +60,37 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
         }
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_alarm, container, false);
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        mHolder.button.setOnClickListener(this);
+        mHolder.proSwipeBtn.setOnSwipeListener(this);
         count = 0;
         mHandler = new Handler();
         mHandler.postDelayed(mRunnable, 500);
-//        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-//        toolbar.setOnClickListener(this);
     }
     @Override
-    public void onClick(View view) {
-
-        mHandler.removeCallbacks(mRunnable);
-        AttendanceUtils.sendResponded(getContext());
-        mHolder.button.setEnabled(false);
-        getActivity().finish();
+    public void onSwipeConfirm() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // task success! show TICK icon in ProSwipeButton
+                mHolder.proSwipeBtn.showResultIcon(true); // false if task failed
+                mHandler.removeCallbacks(mRunnable);
+                AttendanceUtils.sendResponded(getContext());
+                getActivity().finish();
+            }
+        }, 1000);
     }
 
     public static class ViewHolder {
 
-        Button button;
+        ProSwipeButton proSwipeBtn;
 
         public ViewHolder(View view) {
-            button = (Button) view.findViewById(R.id.button);
+            proSwipeBtn = (ProSwipeButton) view.findViewById(R.id.proswipebutton_main);
 
         }
 

@@ -33,4 +33,5 @@ dependencies {
     compile "com.android.support:support-v4:$supportLib"
     compile "com.android.support:design:$supportLib"
     compile 'com.makeramen:roundedimageview:2.2.1'
+    compile 'in.shadowfax:proswipebutton:1.0.1'
 }
