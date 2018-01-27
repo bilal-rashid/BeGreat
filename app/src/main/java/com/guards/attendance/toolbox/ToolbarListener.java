@@ -6,4 +6,5 @@ package com.guards.attendance.toolbox;
 
 public interface ToolbarListener {
     void setTitle(String title,boolean isHome);
+    void setTitleAdmin(String title,boolean isHome);
 }
