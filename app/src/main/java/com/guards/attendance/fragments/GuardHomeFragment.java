@@ -79,14 +79,14 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         mHolder.checkinCard.setOnClickListener(this);
         mHolder.checkoutCard.setOnClickListener(this);
         mHolder.logoutCard.setOnClickListener(this);
-//        if(AttendanceUtils.isGuardCheckin(getContext())){
-//            mHolder.checkinCard.setEnabled(false);
-//            mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-//        }
-//        if(AttendanceUtils.isGuardCheckout(getContext())){
-//            mHolder.checkoutCard.setEnabled(false);
-//            mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-//        }
+        if(AttendanceUtils.isGuardCheckin(getContext())){
+            mHolder.checkinCard.setEnabled(false);
+            mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        }
+        if(AttendanceUtils.isGuardCheckout(getContext())){
+            mHolder.checkoutCard.setEnabled(false);
+            mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        }
     }
     @Override
     public void onClick(View view) {
@@ -138,6 +138,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                 mHolder.checkinCard.setEnabled(false);
                                 mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
                                 AttendanceUtils.checkinGuard(getContext());
+                                AttendanceUtils.sendCheckin(getContext());
                                 AppUtils.startPulse(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
@@ -159,6 +160,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                 mHolder.checkoutCard.setEnabled(false);
                                 mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
                                 AttendanceUtils.checkoutGuard(getContext());
+                                AttendanceUtils.sendCheckout(getContext());
                                 AppUtils.stopPulse(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
