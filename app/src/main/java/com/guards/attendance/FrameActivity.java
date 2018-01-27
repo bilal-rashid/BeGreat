@@ -140,4 +140,19 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
             }
         }
     }
+
+    @Override
+    public void setTitleAdmin(String title, boolean isHome) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+            if (isHome) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                ActivityUtils.centerToolbarTitleAdmin(mToolbar,false);
+            }
+            else {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                ActivityUtils.centerToolbarTitleAdmin(mToolbar,true);
+            }
+        }
+    }
 }

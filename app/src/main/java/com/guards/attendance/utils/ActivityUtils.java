@@ -105,6 +105,30 @@ public class ActivityUtils {
             //also you can use titleView for changing font: titleView.setTypeface(Typeface);
         }
     }
+    public static void centerToolbarTitleAdmin(@NonNull final Toolbar toolbar, Boolean padding) {
+        final CharSequence title = toolbar.getTitle();
+        final ArrayList<View> outViews = new ArrayList<>(1);
+        toolbar.findViewsWithText(outViews, title, View.FIND_VIEWS_WITH_TEXT);
+        if (!outViews.isEmpty()) {
+            final TextView titleView = (TextView) outViews.get(0);
+            titleView.setGravity(Gravity.CENTER);
+            if(padding) {
+                titleView.setPadding(0, 0, AppUtils.dpToPx(25), 0);
+            }
+            else {
+                titleView.setPadding(AppUtils.dpToPx(30), 0, 0, 0);
+            }
+            if (titleView.getLayoutParams() instanceof Toolbar.LayoutParams) {
+                final Toolbar.LayoutParams layoutParams = (Toolbar.LayoutParams) titleView.getLayoutParams();
+                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                toolbar.requestLayout();
+                Typeface exo2 = Typeface.createFromAsset(toolbar.getContext().getAssets(), "RobotoRegular.ttf");
+                titleView.setTypeface(exo2);
+                titleView.setTextColor(ContextCompat.getColor(toolbar.getContext(), R.color.colorToolBarText));
+            }
+            //also you can use titleView for changing font: titleView.setTypeface(Typeface);
+        }
+    }
 
 
     public static void startHomeActivity(Context context, Class<?> class_, String fragmentName) {
