@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.GuardAdapter;
+import com.guards.attendance.api.ApiClient;
+import com.guards.attendance.api.ApiInterface;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
@@ -25,6 +28,10 @@ import com.guards.attendance.utils.LoginUtils;
 import com.guards.attendance.utils.SmsUtils;
 
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Bilal Rashid on 1/20/2018.
@@ -64,6 +71,27 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
         }else {
             mHolder.errorContainer.setVisibility(View.VISIBLE);
         }
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+        HashMap<String,String> map = new HashMap<>();
+        map.put("name","bilal");
+        map.put("number","1234");
+        map.put("ghgg","bilal");
+        map.put("kkj","bilal");
+
+        Call<Object> call = apiService.post(map);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object>call, Response<Object> response) {
+                Log.d("TAAAG",""+response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<Object>call, Throwable t) {
+
+            }
+        });
     }
     private void setupRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

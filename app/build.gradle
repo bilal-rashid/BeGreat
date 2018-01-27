@@ -34,4 +34,5 @@ dependencies {
     compile "com.android.support:design:$supportLib"
     compile 'com.makeramen:roundedimageview:2.2.1'
     compile 'in.shadowfax:proswipebutton:1.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
 }
