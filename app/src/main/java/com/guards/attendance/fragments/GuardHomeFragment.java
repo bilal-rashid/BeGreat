@@ -22,6 +22,7 @@ import com.guards.attendance.models.User;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
+import com.guards.attendance.utils.AttendanceUtils;
 import com.guards.attendance.utils.LoginUtils;
 
 /**
@@ -116,6 +117,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                     public void onClick(View view) {
                         switch (view.getId()) {
                             case R.id.button_positive:
+                                AttendanceUtils.sendEmergency(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
                             case R.id.button_negative:
@@ -135,7 +137,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                             case R.id.button_positive:
                                 mHolder.checkinCard.setEnabled(false);
                                 mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-//                                AttendanceUtils.checkinGuard(getContext());
+                                AttendanceUtils.checkinGuard(getContext());
                                 AppUtils.startPulse(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
@@ -156,7 +158,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                             case R.id.button_positive:
                                 mHolder.checkoutCard.setEnabled(false);
                                 mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-//                                AttendanceUtils.checkoutGuard(getContext());
+                                AttendanceUtils.checkoutGuard(getContext());
                                 AppUtils.stopPulse(getContext());
                                 mSimpleDialog.dismiss();
                                 break;
