@@ -42,7 +42,7 @@ public class GuardAdapter extends RecyclerView.Adapter<GuardAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mItemclickListener.onItemClick(view,mItems.get(position).number,position);
+                mItemclickListener.onItemClick(view,mItems.get(position),position);
             }
         });
         holder.layout.setOnTouchListener(new View.OnTouchListener() {
@@ -52,7 +52,7 @@ public class GuardAdapter extends RecyclerView.Adapter<GuardAdapter.ViewHolder> 
 
                     case MotionEvent.ACTION_UP:
                         view.setBackgroundColor(view.getContext().getResources().getColor(R.color.colorWhite));
-                        mItemclickListener.onItemClick(view,mItems.get(position).number,position);
+                        mItemclickListener.onItemClick(view,mItems.get(position),position);
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         view.setBackgroundColor(view.getContext().getResources().getColor(R.color.colorWhite));

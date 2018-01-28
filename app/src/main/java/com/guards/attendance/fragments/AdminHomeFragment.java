@@ -110,8 +110,8 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onItemClick(View view, Object data, int position) {
-        String number = (String)data;
-        Toast.makeText(getContext(),number,Toast.LENGTH_SHORT).show();
+        Guard guard= (Guard) data;
+        Toast.makeText(getContext(),guard.number,Toast.LENGTH_SHORT).show();
     }
 
     public static class ViewHolder {
