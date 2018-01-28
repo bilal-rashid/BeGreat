@@ -21,13 +21,14 @@ import com.guards.attendance.adapters.GuardAdapter;
 import com.guards.attendance.api.ApiClient;
 import com.guards.attendance.api.ApiInterface;
 import com.guards.attendance.dialog.SimpleDialog;
+import com.guards.attendance.models.Guard;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.LoginUtils;
 import com.guards.attendance.utils.SmsUtils;
 
-import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +41,7 @@ import retrofit2.Response;
 public class AdminHomeFragment extends Fragment implements View.OnClickListener,OnItemClickListener {
 
     private ViewHolder mHolder;
-    private HashMap<String,String> mHashmap;
+    private List<Guard> mGuardList;
     private SimpleDialog mSimpleDialog;
     private GuardAdapter mGuardAdapter;
     @Override
@@ -63,35 +64,35 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        mHashmap = SmsUtils.getAllGuards(getContext());
-        if(mHashmap.size() > 0){
+        mGuardList = SmsUtils.getAllGuards(getContext());
+        if(mGuardList.size() > 0){
             setupRecyclerView();
-            populateData(mHashmap);
+            populateData(mGuardList);
             mHolder.errorContainer.setVisibility(View.GONE);
         }else {
             mHolder.errorContainer.setVisibility(View.VISIBLE);
         }
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-        HashMap<String,String> map = new HashMap<>();
-        map.put("name","bilal");
-        map.put("number","1234");
-        map.put("ghgg","bilal");
-        map.put("kkj","bilal");
-
-        Call<Object> call = apiService.post(map);
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object>call, Response<Object> response) {
-                Log.d("TAAAG",""+response.body());
-
-            }
-
-            @Override
-            public void onFailure(Call<Object>call, Throwable t) {
-
-            }
-        });
+//        ApiInterface apiService =
+//                ApiClient.getClient().create(ApiInterface.class);
+//        HashMap<String,String> map = new HashMap<>();
+//        map.put("name","bilal");
+//        map.put("number","1234");
+//        map.put("ghgg","bilal");
+//        map.put("kkj","bilal");
+//
+//        Call<Object> call = apiService.post(map);
+//        call.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(Call<Object>call, Response<Object> response) {
+//                Log.d("TAAAG",""+response.body());
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Object>call, Throwable t) {
+//
+//            }
+//        });
     }
     private void setupRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -99,7 +100,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
         mGuardAdapter= new GuardAdapter(this);
         mHolder.guardsRecycler.setAdapter(mGuardAdapter);
     }
-    private void populateData(HashMap<String,String> objects) {
+    private void populateData(List<Guard> objects) {
         mGuardAdapter.addAll(objects);
     }
     @Override

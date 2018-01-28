@@ -9,16 +9,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.guards.attendance.R;
+import com.guards.attendance.models.Guard;
 import com.guards.attendance.toolbox.OnItemClickListener;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Bilal Rashid on 1/27/2018.
  */
 
 public class GuardAdapter extends RecyclerView.Adapter<GuardAdapter.ViewHolder> {
-    private HashMap<String,String> mItems = new HashMap<>();
+    private List<Guard> mItems = new ArrayList<>();
     OnItemClickListener mItemclickListener;
 
     public GuardAdapter(OnItemClickListener onItemClickListener){
@@ -35,12 +37,12 @@ public class GuardAdapter extends RecyclerView.Adapter<GuardAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.emp_phoneText.setText(mItems.keySet().toArray()[position] + "");
-        holder.emp_idText.setText(mItems.values().toArray()[position] + "");
+        holder.emp_phoneText.setText(mItems.get(position).number);
+        holder.emp_idText.setText(mItems.get(position).emp_id);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mItemclickListener.onItemClick(view,mItems.keySet().toArray()[position]+"",position);
+                mItemclickListener.onItemClick(view,mItems.get(position).number,position);
             }
         });
         holder.layout.setOnTouchListener(new View.OnTouchListener() {
@@ -50,7 +52,7 @@ public class GuardAdapter extends RecyclerView.Adapter<GuardAdapter.ViewHolder> 
 
                     case MotionEvent.ACTION_UP:
                         view.setBackgroundColor(view.getContext().getResources().getColor(R.color.colorWhite));
-                        mItemclickListener.onItemClick(view,mItems.keySet().toArray()[position]+"",position);
+                        mItemclickListener.onItemClick(view,mItems.get(position).number,position);
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         view.setBackgroundColor(view.getContext().getResources().getColor(R.color.colorWhite));
@@ -73,10 +75,10 @@ public class GuardAdapter extends RecyclerView.Adapter<GuardAdapter.ViewHolder> 
     public int getItemCount() {
         return (mItems != null ? mItems.size() : 0);
     }
-    public void addAll(HashMap<String,String> collection) {
+    public void addAll(List<Guard> collection) {
         mItems.clear();
         if (collection != null)
-            mItems.putAll(collection);
+            mItems.addAll(collection);
         notifyDataSetChanged();
     }
 

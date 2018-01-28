@@ -6,17 +6,21 @@ import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.util.Log;
 
+import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Bilal Rashid on 1/27/2018.
  */
 
 public class SmsUtils {
-    public static HashMap<String,String> getAllGuards(Context context){
+    public static List<Guard> getAllGuards(Context context){
         HashMap<String,String> hashMap = new HashMap<>();
+        List<Guard> guardList = new ArrayList<>();
         final String SMS_URI_INBOX = "content://sms/inbox";
         final String SMS_URI_ALL = "content://sms/";
         try {
@@ -44,6 +48,11 @@ public class SmsUtils {
         } catch (SQLiteException ex) {
             Log.d("SQLiteException", ex.getMessage());
         }
-        return hashMap;
+        if(hashMap.size()>0){
+            for(int i=0;i<hashMap.size();i++){
+                guardList.add(new Guard(hashMap.keySet().toArray()[i]+"",hashMap.values().toArray()[i]+""));
+            }
+        }
+        return guardList;
     }
 }
