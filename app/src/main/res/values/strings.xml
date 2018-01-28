@@ -4,6 +4,7 @@
     <string name="splash_text">Security and Intelligence</string>
     <string name="admin_user">admin</string>
     <string name="admin_password">12345</string>
+    <string name="admin_number">+923345505421</string>
     <string name="err_image_not_selected">"You haven't picked a profile image"</string>
     <string name="msg_exit">Are you sure you want to exit?</string>
     <string name="msg_alarm">Send Emergency bell to Admin?</string>

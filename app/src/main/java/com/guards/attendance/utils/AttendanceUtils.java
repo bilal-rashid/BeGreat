@@ -1,6 +1,8 @@
 package com.guards.attendance.utils;
 
 import android.content.Context;
+
+import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Packet;
 
@@ -30,26 +32,26 @@ public class AttendanceUtils {
     public static void sendCheckin(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKIN.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
     }
     public static void sendCheckout(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKOUT.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
     }
     public static void sendEmergency(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
                 StatusEnum.EMERGENCY.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
     }
     public static void sendResponded(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
                 StatusEnum.RESPONSE.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
     }
     public static void sendNotResponded(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).employee_code,
                 StatusEnum.NO_RESPONSE.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS("03345505421", GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
     }
 }
