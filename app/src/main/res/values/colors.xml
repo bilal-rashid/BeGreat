@@ -183,4 +183,11 @@
     <color name="card_reports_color">#80CBC4</color>
     <color name="card_dummy_color_pressed">#4f9a94</color>
     <color name="colorPrimary_transparent">#875cc5f4</color>
+
+
+    <color name="color_responded">#a5d6a7</color>
+    <color name="color_not_responded">#f5754d</color>
+    <color name="color_checkout">#ffee58</color>
+    <color name="color_checkin">#9fa8da</color>
+    <color name="color_emergency">#ff5722</color>
 </resources>

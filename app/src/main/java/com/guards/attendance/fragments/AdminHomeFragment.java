@@ -25,6 +25,8 @@ import com.guards.attendance.models.Guard;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
+import com.guards.attendance.utils.Constants;
+import com.guards.attendance.utils.GsonUtils;
 import com.guards.attendance.utils.LoginUtils;
 import com.guards.attendance.utils.SmsUtils;
 
@@ -111,7 +113,9 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onItemClick(View view, Object data, int position) {
         Guard guard= (Guard) data;
-        Toast.makeText(getContext(),guard.number,Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(guard));
+        ActivityUtils.startActivity(getActivity(), FrameActivity.class, GuardDetailsFragment.class.getName(), bundle);
     }
 
     public static class ViewHolder {

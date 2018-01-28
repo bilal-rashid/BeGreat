@@ -15,6 +15,7 @@ public class Constants {
     public static final String CHECKIN = "checkin";
     public static final String CHECKOUT = "checkout";
     public static final String UNIQUE_ID = "UTgXclLFLpNaEESvh";
-    public static final long INTERVAL = 1000 * 60 * 60;
+    public static final long INTERVAL = 1000 * 60 * 1;
+    public static final String GUARD_DATA = "guard_data";
 
 }
