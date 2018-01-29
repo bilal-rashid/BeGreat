@@ -87,7 +87,9 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
             @Override
             public void run() {
                 // task success! show TICK icon in ProSwipeButton
-                mHolder.proSwipeBtn.showResultIcon(true); // false if task failed
+                try {
+                    mHolder.proSwipeBtn.showResultIcon(true);
+                }catch (Exception e){}
                 mHandler.removeCallbacks(mRunnable);
                 AttendanceUtils.sendResponded(getContext());
                 getActivity().finish();
