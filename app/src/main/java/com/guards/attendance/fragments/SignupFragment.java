@@ -39,7 +39,6 @@ import static android.app.Activity.RESULT_OK;
 public class SignupFragment extends Fragment implements View.OnClickListener {
 
     private ViewHolder mHolder;
-    private boolean mIsProfileImageAdded = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +61,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
         mHolder = new ViewHolder(view);
         mHolder.userImage.setOnClickListener(this);
         mHolder.signupButton.setOnClickListener(this);
+        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/BeGreat/";
     }
     @Override
     public void onClick(View view) {
@@ -90,7 +90,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                     MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
             return;
         }
-        dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/BeGreat/";
+
         File newdir = new File(dir);
         newdir.mkdirs();
         String file = dir + "Guard_Profile.jpg";
@@ -122,9 +122,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                     bitmap.getHeight(), matrix, true);
             mHolder.userImage.setImageBitmap(rotatedBitmap);
-            mIsProfileImageAdded = true;
         }else {
-            mIsProfileImageAdded = false;
             AppUtils.showSnackBar(getView(), getString(R.string.err_image_not_selected));
         }
     }
@@ -171,22 +169,30 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
         mHolder.inputLayoutPassword.setError(null);
         mHolder.inputLayoutPassword.setErrorEnabled(false);
         String filepath = dir + "Guard_Profile.jpg";
-        User user;
-        if(mIsProfileImageAdded) {
-            user = new User(mHolder.usernameEditText.getText().toString(),
-                    mHolder.passwordEditText.getText().toString(),
-                    mHolder.empEditText.getText().toString(), filepath);
-        }else {
-            user = new User(mHolder.usernameEditText.getText().toString(),
-                    mHolder.passwordEditText.getText().toString(),
-                    mHolder.empEditText.getText().toString(), "null");
-        }
+        User user= new User(mHolder.usernameEditText.getText().toString(),
+                mHolder.passwordEditText.getText().toString(),
+                mHolder.empEditText.getText().toString(), filepath);
         LoginUtils.saveUser(getContext(),user);
         Toast.makeText(getContext(),"User Registered",Toast.LENGTH_SHORT).show();
         getActivity().onBackPressed();
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        try {
+            String filepath = dir + "Guard_Profile.jpg";
+            Matrix matrix = new Matrix();
+            matrix.postRotate(AppUtils.getImageOrientation(filepath));
+            Bitmap bitmap = BitmapFactory.decodeFile(filepath);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                    bitmap.getHeight(), matrix, true);
+            mHolder.userImage.setImageBitmap(rotatedBitmap);
+        }catch (Exception e){
+
+        }
+    }
 
     public static class ViewHolder {
 

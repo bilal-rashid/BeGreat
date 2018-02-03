@@ -1,7 +1,10 @@
 package com.guards.attendance.fragments;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,14 +69,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        mGuardList = SmsUtils.getAllGuards(getContext());
-        if(mGuardList.size() > 0){
-            setupRecyclerView();
-            populateData(mGuardList);
-            mHolder.errorContainer.setVisibility(View.GONE);
-        }else {
-            mHolder.errorContainer.setVisibility(View.VISIBLE);
-        }
+        getMessagesAndPopulateList();
 //        ApiInterface apiService =
 //                ApiClient.getClient().create(ApiInterface.class);
 //        HashMap<String,String> map = new HashMap<>();
@@ -95,6 +91,35 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
 //
 //            }
 //        });
+    }
+    private static final int MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 3;
+    public void getMessagesAndPopulateList(){
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_SMS},
+                    MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.SEND_SMS},
+                    MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
+            return;
+        }
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.RECEIVE_SMS},
+                    MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
+            return;
+        }
+        mGuardList = SmsUtils.getAllGuards(getContext());
+        if(mGuardList.size() > 0){
+            setupRecyclerView();
+            populateData(mGuardList);
+            mHolder.errorContainer.setVisibility(View.GONE);
+        }else {
+            mHolder.errorContainer.setVisibility(View.VISIBLE);
+        }
     }
     private void setupRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -161,6 +186,25 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getMessagesAndPopulateList();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 }

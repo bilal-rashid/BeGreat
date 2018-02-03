@@ -54,19 +54,15 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         super.onViewCreated(view, savedInstanceState);
         mUser = LoginUtils.getUser(getContext());
         mHolder = new ViewHolder(view);
-        if(mUser.image_path.equals("null")){
+        try {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(AppUtils.getImageOrientation(mUser.image_path));
+            Bitmap bitmap = BitmapFactory.decodeFile(mUser.image_path);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                    bitmap.getHeight(), matrix, true);
+            mHolder.profileImage.setImageBitmap(rotatedBitmap);
+        }catch (Exception e){
             mHolder.profileImage.setImageResource(R.drawable.user);
-        }else {
-            try {
-                Matrix matrix = new Matrix();
-                matrix.postRotate(AppUtils.getImageOrientation(mUser.image_path));
-                Bitmap bitmap = BitmapFactory.decodeFile(mUser.image_path);
-                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                        bitmap.getHeight(), matrix, true);
-                mHolder.profileImage.setImageBitmap(rotatedBitmap);
-            }catch (Exception e){
-                mHolder.profileImage.setImageResource(R.drawable.user);
-            }
         }
         mHolder.empCodeText.setText(mUser.employee_code);
         mHolder.usernameText.setText(mUser.username);
