@@ -5,9 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAppBG"
     android:orientation="vertical">
-
-    <include layout="@layout/error" />
-
+    <TextView
+        android:id="@+id/text_emp_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_medium"
+        android:layout_marginBottom="@dimen/spacing_small"
+        android:layout_gravity="center"
+        android:textSize="@dimen/app_title"
+        android:text="Guard101"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_guards"
         android:layout_width="match_parent"

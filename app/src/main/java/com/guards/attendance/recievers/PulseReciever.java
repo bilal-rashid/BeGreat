@@ -26,6 +26,6 @@ public class PulseReciever extends BroadcastReceiver{
                 PowerManager.SCREEN_BRIGHT_WAKE_LOCK| PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
         screenLock.acquire(5000);
         AppUtils.vibrate(context);
-        ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(),null,true);
+        ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(),null,false);
     }
 }

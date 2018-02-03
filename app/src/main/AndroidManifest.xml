@@ -35,6 +35,13 @@
         <receiver android:name=".recievers.PulseReciever"
             android:process=":remote"
             android:enabled="true"/>
+        <receiver android:name=".recievers.MessageReciever"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter android:priority="2147483647" >
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

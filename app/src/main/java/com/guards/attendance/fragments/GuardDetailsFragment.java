@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.PacketsAdapter;
@@ -58,12 +59,11 @@ public class GuardDetailsFragment extends Fragment{
         mHolder = new ViewHolder(view);
         manipulateBundle();
         mPacketList = SmsUtils.getGuardPackets(getContext(),mGuard.number);
+        mHolder.emp_id_text.setText(mGuard.emp_id);
         if(mPacketList.size() > 0){
             setupRecyclerView();
             populateData(mPacketList);
-            mHolder.errorContainer.setVisibility(View.GONE);
         }else {
-            mHolder.errorContainer.setVisibility(View.VISIBLE);
         }
 
     }
@@ -86,11 +86,11 @@ public class GuardDetailsFragment extends Fragment{
     public static class ViewHolder {
 
         RecyclerView guardsRecycler;
-        LinearLayout errorContainer;
+        TextView emp_id_text;
 
         public ViewHolder(View view) {
             guardsRecycler = (RecyclerView) view.findViewById(R.id.recycler_guards);
-            errorContainer = (LinearLayout) view.findViewById(R.id.error_container);
+            emp_id_text = (TextView) view.findViewById(R.id.text_emp_id);
         }
     }
 
