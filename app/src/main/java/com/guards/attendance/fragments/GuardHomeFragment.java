@@ -1,10 +1,13 @@
 package com.guards.attendance.fragments;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
@@ -33,6 +37,9 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     private ViewHolder mHolder;
     private User mUser;
     private SimpleDialog mSimpleDialog;
+    private static final int MY_SMS_REQ_CODE_EMERGENCY= 3;
+    private static final int MY_SMS_REQ_CODE_CHECKIN= 4;
+    private static final int MY_SMS_REQ_CODE_CHECKOUT= 5;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,9 +120,17 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                     public void onClick(View view) {
                         switch (view.getId()) {
                             case R.id.button_positive:
-                                AttendanceUtils.sendEmergency(getContext());
-                                mSimpleDialog.dismiss();
-                                break;
+                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                                    mSimpleDialog.dismiss();
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.SEND_SMS},
+                                            MY_SMS_REQ_CODE_EMERGENCY);
+                                }else {
+                                    AttendanceUtils.sendEmergency(getContext());
+                                    mSimpleDialog.dismiss();
+                                    break;
+                                }
+
                             case R.id.button_negative:
                                 mSimpleDialog.dismiss();
                                 break;
@@ -131,12 +146,19 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                     public void onClick(View view) {
                         switch (view.getId()) {
                             case R.id.button_positive:
-                                mHolder.checkinCard.setEnabled(false);
-                                mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                AttendanceUtils.checkinGuard(getContext());
-                                AttendanceUtils.sendCheckin(getContext());
-                                AppUtils.startPulse(getContext());
-                                mSimpleDialog.dismiss();
+                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                                    mSimpleDialog.dismiss();
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.SEND_SMS},
+                                            MY_SMS_REQ_CODE_CHECKIN);
+                                }else {
+                                    mHolder.checkinCard.setEnabled(false);
+                                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                                    AttendanceUtils.checkinGuard(getContext());
+                                    AttendanceUtils.sendCheckin(getContext());
+                                    AppUtils.startPulse(getContext());
+                                    mSimpleDialog.dismiss();
+                                }
                                 break;
                             case R.id.button_negative:
                                 mSimpleDialog.dismiss();
@@ -153,12 +175,19 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                     public void onClick(View view) {
                         switch (view.getId()) {
                             case R.id.button_positive:
-                                mHolder.checkoutCard.setEnabled(false);
-                                mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                AttendanceUtils.checkoutGuard(getContext());
-                                AttendanceUtils.sendCheckout(getContext());
-                                AppUtils.stopPulse(getContext());
-                                mSimpleDialog.dismiss();
+                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                                    mSimpleDialog.dismiss();
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.SEND_SMS},
+                                            MY_SMS_REQ_CODE_CHECKOUT);
+                                }else {
+                                    mHolder.checkoutCard.setEnabled(false);
+                                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                                    AttendanceUtils.checkoutGuard(getContext());
+                                    AttendanceUtils.sendCheckout(getContext());
+                                    AppUtils.stopPulse(getContext());
+                                    mSimpleDialog.dismiss();
+                                }
                                 break;
                             case R.id.button_negative:
                                 mSimpleDialog.dismiss();
@@ -227,5 +256,56 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
             logoutCard = (CardView) view.findViewById(R.id.card_logout);
         }
 
+    }
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_SMS_REQ_CODE_CHECKIN: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mHolder.checkinCard.setEnabled(false);
+                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                    AttendanceUtils.checkinGuard(getContext());
+                    AttendanceUtils.sendCheckin(getContext());
+                    AppUtils.startPulse(getContext());
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    AppUtils.showSnackBar(getView(), getString(R.string.err_permission_not_granted));
+                }
+                return;
+            }
+            case MY_SMS_REQ_CODE_CHECKOUT:{
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mHolder.checkoutCard.setEnabled(false);
+                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                    AttendanceUtils.checkoutGuard(getContext());
+                    AttendanceUtils.sendCheckout(getContext());
+                    AppUtils.stopPulse(getContext());
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    AppUtils.showSnackBar(getView(), getString(R.string.err_permission_not_granted));
+                }
+                return;
+            }
+            case MY_SMS_REQ_CODE_EMERGENCY: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    AttendanceUtils.sendEmergency(getContext());
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    AppUtils.showSnackBar(getView(), getString(R.string.err_permission_not_granted));
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 }

@@ -28,6 +28,7 @@ import com.guards.attendance.models.Guard;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
+import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.Constants;
 import com.guards.attendance.utils.GsonUtils;
 import com.guards.attendance.utils.LoginUtils;
@@ -200,6 +201,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
+                    AppUtils.showSnackBar(getView(), getString(R.string.err_permission_not_granted));
                 }
                 return;
             }

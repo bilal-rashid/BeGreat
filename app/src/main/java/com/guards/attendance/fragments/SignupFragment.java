@@ -138,6 +138,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
+                    AppUtils.showSnackBar(getView(), getString(R.string.err_permission_not_granted));
                 }
                 return;
             }
