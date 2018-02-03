@@ -61,6 +61,7 @@ public class EmergencyFragment extends Fragment implements ProSwipeButton.OnSwip
         mediaPlayer = MediaPlayer.create(getContext(), Settings.System.DEFAULT_ALARM_ALERT_URI);
         mediaPlayer.setVolume(100,100);
         mediaPlayer.start();
+        mediaPlayer.setLooping(true);
     }
     @Override
     public void onSwipeConfirm() {

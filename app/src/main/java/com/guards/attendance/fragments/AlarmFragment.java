@@ -38,7 +38,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
             try {
                 mHandler.removeCallbacks(mRunnable);
                 count++;
-                if(count > 10){
+                if(count > 30){
                     mHolder.proSwipeBtn.showResultIcon(false);
                     AttendanceUtils.sendNotResponded(getContext());
                     mediaPlayer.stop();
@@ -79,6 +79,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
         mediaPlayer = MediaPlayer.create(getContext(), Settings.System.DEFAULT_ALARM_ALERT_URI);
         mediaPlayer.setVolume(100,100);
         mediaPlayer.start();
+        mediaPlayer.setLooping(true);
     }
     @Override
     public void onSwipeConfirm() {
