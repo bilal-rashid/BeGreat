@@ -65,16 +65,7 @@ public class EmergencyFragment extends Fragment implements ProSwipeButton.OnSwip
     @Override
     public void onSwipeConfirm() {
         mediaPlayer.stop();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // task success! show TICK icon in ProSwipeButton
-                try {
-                    mHolder.proSwipeBtn.showResultIcon(true);
-                }catch (Exception e){}
-                getActivity().finish();
-            }
-        }, 500);
+        getActivity().finish();
     }
 
     public static class ViewHolder {

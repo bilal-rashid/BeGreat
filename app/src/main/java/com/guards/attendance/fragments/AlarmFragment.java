@@ -83,18 +83,9 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
     @Override
     public void onSwipeConfirm() {
         mediaPlayer.stop();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // task success! show TICK icon in ProSwipeButton
-                try {
-                    mHolder.proSwipeBtn.showResultIcon(true);
-                }catch (Exception e){}
-                mHandler.removeCallbacks(mRunnable);
-                AttendanceUtils.sendResponded(getContext());
-                getActivity().finish();
-            }
-        }, 1000);
+        mHandler.removeCallbacks(mRunnable);
+        AttendanceUtils.sendResponded(getContext());
+        getActivity().finish();
     }
 
     public static class ViewHolder {
