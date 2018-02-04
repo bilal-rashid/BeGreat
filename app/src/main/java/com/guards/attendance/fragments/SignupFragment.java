@@ -62,6 +62,13 @@ public class SignupFragment extends Fragment implements View.OnClickListener {
         mHolder.userImage.setOnClickListener(this);
         mHolder.signupButton.setOnClickListener(this);
         dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/BeGreat/";
+        User user = LoginUtils.getUser(getContext());
+        if(user != null){
+            mHolder.empEditText.setText(user.employee_code);
+            mHolder.empEditText.setEnabled(false);
+            mHolder.usernameEditText.setText(user.username);
+            mHolder.usernameEditText.setEnabled(false);
+        }
     }
     @Override
     public void onClick(View view) {
