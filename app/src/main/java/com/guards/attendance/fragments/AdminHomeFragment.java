@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.guards.attendance.FrameActivity;
@@ -25,6 +27,7 @@ import com.guards.attendance.api.ApiClient;
 import com.guards.attendance.api.ApiInterface;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.Guard;
+import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
@@ -50,6 +53,17 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     private List<Guard> mGuardList;
     private SimpleDialog mSimpleDialog;
     private GuardAdapter mGuardAdapter;
+    private Handler mHandler;
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                mHandler.removeCallbacks(mRunnable);
+                Syncdata();
+            }catch (Exception e){}
+
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,28 +84,10 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
+        mHolder.progressBar.setVisibility(View.GONE);
+        mHandler = new Handler();
         getMessagesAndPopulateList();
-//        ApiInterface apiService =
-//                ApiClient.getClient().create(ApiInterface.class);
-//        HashMap<String,String> map = new HashMap<>();
-//        map.put("name","bilal");
-//        map.put("number","1234");
-//        map.put("ghgg","bilal");
-//        map.put("kkj","bilal");
-//
-//        Call<Object> call = apiService.post(map);
-//        call.enqueue(new Callback<Object>() {
-//            @Override
-//            public void onResponse(Call<Object>call, Response<Object> response) {
-//                Log.d("TAAAG",""+response.body());
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Object>call, Throwable t) {
-//
-//            }
-//        });
+
     }
     private static final int MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 3;
     public void getMessagesAndPopulateList(){
@@ -148,10 +144,12 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
 
         RecyclerView guardsRecycler;
         LinearLayout errorContainer;
+        ProgressBar progressBar;
 
         public ViewHolder(View view) {
             guardsRecycler = (RecyclerView) view.findViewById(R.id.recycler_guards);
             errorContainer = (LinearLayout) view.findViewById(R.id.error_container);
+            progressBar = (ProgressBar) view.findViewById(R.id.progress);
         }
     }
     @Override
@@ -183,12 +181,47 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                 mSimpleDialog.show();
                 return true;
             case R.id.action_sync:
-                Toast.makeText(getContext(),"Sync",Toast.LENGTH_SHORT).show();
+                mHolder.progressBar.setVisibility(View.VISIBLE);
+                mHandler.postDelayed(mRunnable, 100);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void Syncdata() {
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+        List<Packet> list = SmsUtils.getAllPackets(getContext(),true);
+        if(list.size()>0){
+            Call<Object> call = apiService.postdata(GsonUtils.toJson(list));
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    mHolder.progressBar.setVisibility(View.GONE);
+                    Log.d("TAAAG", "" + response.body());
+                    Log.d("TAAAG", "" + response);
+                    if(response.body() != null){
+                        if(response.body().toString().contains("Message=Record Save Sucessfully")){
+                            Toast.makeText(getContext(),"Sync Completed Succesfully",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    mHolder.progressBar.setVisibility(View.GONE);
+                    AppUtils.showSnackBar(getView(),"Some error occurred");
+
+                }
+            });
+        }else {
+            AppUtils.showSnackBar(getView(),"Data not available");
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
