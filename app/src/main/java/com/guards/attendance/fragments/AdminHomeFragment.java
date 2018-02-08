@@ -28,6 +28,7 @@ import com.guards.attendance.api.ApiInterface;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.models.ResponseModel;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
@@ -47,7 +48,7 @@ import retrofit2.Response;
  * Created by Bilal Rashid on 1/20/2018.
  */
 
-public class AdminHomeFragment extends Fragment implements View.OnClickListener,OnItemClickListener {
+public class AdminHomeFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
 
     private ViewHolder mHolder;
     private List<Guard> mGuardList;
@@ -60,26 +61,31 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
             try {
                 mHandler.removeCallbacks(mRunnable);
                 Syncdata();
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
 
         }
     };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitleAdmin("Admin",true);
+            ((ToolbarListener) context).setTitleAdmin("Admin", true);
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_admin, container, false);
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -89,8 +95,10 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
         getMessagesAndPopulateList();
 
     }
+
     private static final int MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 3;
-    public void getMessagesAndPopulateList(){
+
+    public void getMessagesAndPopulateList() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(
                     new String[]{Manifest.permission.READ_SMS},
@@ -110,23 +118,26 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
             return;
         }
         mGuardList = SmsUtils.getAllGuards(getContext());
-        if(mGuardList.size() > 0){
+        if (mGuardList.size() > 0) {
             setupRecyclerView();
             populateData(mGuardList);
             mHolder.errorContainer.setVisibility(View.GONE);
-        }else {
+        } else {
             mHolder.errorContainer.setVisibility(View.VISIBLE);
         }
     }
+
     private void setupRecyclerView() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mHolder.guardsRecycler.setLayoutManager(mLayoutManager);
-        mGuardAdapter= new GuardAdapter(this);
+        mGuardAdapter = new GuardAdapter(this);
         mHolder.guardsRecycler.setAdapter(mGuardAdapter);
     }
+
     private void populateData(List<Guard> objects) {
         mGuardAdapter.addAll(objects);
     }
+
     @Override
     public void onClick(View view) {
 
@@ -134,7 +145,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onItemClick(View view, Object data, int position) {
-        Guard guard= (Guard) data;
+        Guard guard = (Guard) data;
         Bundle bundle = new Bundle();
         bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(guard));
         ActivityUtils.startActivity(getActivity(), FrameActivity.class, GuardDetailsFragment.class.getName(), bundle);
@@ -152,11 +163,13 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
             progressBar = (ProgressBar) view.findViewById(R.id.progress);
         }
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.admin_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -169,7 +182,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                         switch (view.getId()) {
                             case R.id.button_positive:
                                 LoginUtils.logout(getContext());
-                                ActivityUtils.startHomeActivity(getContext(), FrameActivity.class,null);
+                                ActivityUtils.startHomeActivity(getContext(), FrameActivity.class, null);
                                 mSimpleDialog.dismiss();
                                 break;
                             case R.id.button_negative:
@@ -181,8 +194,12 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                 mSimpleDialog.show();
                 return true;
             case R.id.action_sync:
-                mHolder.progressBar.setVisibility(View.VISIBLE);
-                mHandler.postDelayed(mRunnable, 100);
+                if (AppUtils.isInternetAvailable(getContext())) {
+                    mHolder.progressBar.setVisibility(View.VISIBLE);
+                    mHandler.postDelayed(mRunnable, 100);
+                } else {
+                    AppUtils.makeToast(getContext(), "Internet not Available");
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -192,34 +209,30 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     private void Syncdata() {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        List<Packet> list = SmsUtils.getAllPackets(getContext(),true);
-        if(list.size()>0){
-            Call<Object> call = apiService.postdata(GsonUtils.toJson(list));
-            call.enqueue(new Callback<Object>() {
+        List<Packet> list = SmsUtils.getAllPackets(getContext(), true);
+        if (list.size() > 0) {
+            Call<ResponseModel> call = apiService.TEST(list);
+            call.enqueue(new Callback<ResponseModel>() {
                 @Override
-                public void onResponse(Call<Object> call, Response<Object> response) {
+                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
                     mHolder.progressBar.setVisibility(View.GONE);
-                    Log.d("TAAAG", "" + response.body());
-                    Log.d("TAAAG", "" + response);
-                    if(response.body() != null){
-                        if(response.body().toString().contains("Message=Record Save Sucessfully")){
-                            Toast.makeText(getContext(),"Sync Completed Succesfully",Toast.LENGTH_SHORT).show();
-                        }
+                    if (response.body().Status) {
+                        AppUtils.showSnackBar(getView(), "Sync Completed Successfully");
+                    } else {
+                        AppUtils.showSnackBar(getView(), "UnSuccessful");
                     }
-
-
                 }
 
                 @Override
-                public void onFailure(Call<Object> call, Throwable t) {
+                public void onFailure(Call<ResponseModel> call, Throwable t) {
                     mHolder.progressBar.setVisibility(View.GONE);
-                    AppUtils.showSnackBar(getView(),"Some error occurred");
-
+                    AppUtils.showSnackBar(getView(), "Some Error Occurred");
                 }
             });
-        }else {
-            AppUtils.showSnackBar(getView(),"Data not available");
+        } else {
+            AppUtils.showSnackBar(getView(), "Data not available");
         }
+
     }
 
     @Override

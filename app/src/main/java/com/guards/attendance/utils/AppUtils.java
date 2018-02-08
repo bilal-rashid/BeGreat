@@ -8,6 +8,8 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
@@ -21,6 +23,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.guards.attendance.R;
 import com.guards.attendance.recievers.PulseReciever;
@@ -198,6 +201,19 @@ public class AppUtils {
 //        final MediaPlayer mp = MediaPlayer.create(context, R.raw.buzzer);
 //        mp.start();
 //        mp.setVolume(100,100);
+    }
+    public static boolean isInternetAvailable(final Context context) {
+        ConnectivityManager conn = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = conn.getActiveNetworkInfo();
+        if (activeNetworkInfo != null
+                && activeNetworkInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
+    }
+    public static void makeToast(Context context, String text) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
 }

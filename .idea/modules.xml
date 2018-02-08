@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Attendance.iml" filepath="$PROJECT_DIR$/Attendance.iml" />
+      <module fileurl="file://E:\Taimoor TEO\BeGreat\Attendance.iml" filepath="E:\Taimoor TEO\BeGreat\Attendance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BeGreat.iml" filepath="$PROJECT_DIR$/BeGreat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

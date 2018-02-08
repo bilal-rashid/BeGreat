@@ -1,6 +1,10 @@
 package com.guards.attendance.api;
 
+import com.guards.attendance.models.Packet;
+import com.guards.attendance.models.ResponseModel;
+
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -19,10 +23,15 @@ import retrofit2.http.Query;
 public interface ApiInterface {
     @GET("movie/top_rated")
     Call<Object> getTopRatedMovies(@Query("api_key") String apiKey);
-    @POST("SaveAttendence")
+    @POST("TestAPI")
     Call<Object> post(@Body HashMap<String, String> body);
-    @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
     @POST("SaveAttendence")
-    Call<Object> postdata(@Field("request") String amount);
+    Call<Object> postdata(@Body List<Packet> data);
+    @FormUrlEncoded
+    @POST("TestAPI")
+    Call<Object> test(@Field("request") String data);
+    @Headers({"Content-type:application/json"})
+    @POST("/SaveAttendence")
+    Call<ResponseModel> TEST(@Body List<Packet> args);
 }
