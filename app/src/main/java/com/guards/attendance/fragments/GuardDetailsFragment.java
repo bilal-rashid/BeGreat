@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.PacketsAdapter;
+import com.guards.attendance.database.AppDataBase;
+import com.guards.attendance.database.DatabaseUtils;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.ToolbarListener;
@@ -59,6 +61,10 @@ public class GuardDetailsFragment extends Fragment{
         mHolder = new ViewHolder(view);
         manipulateBundle();
         mPacketList = SmsUtils.getGuardPackets(getContext(),mGuard.number);
+        AppDataBase database = AppDataBase.getAppDatabase(getContext());
+        DatabaseUtils.with(database).addPackets(mPacketList);
+        Log.d("TAAAG",""+database.packetDao().loadAll().size());
+        Log.d("TAAAG",""+GsonUtils.toJson(database.packetDao().loadAll()));
         mHolder.emp_id_text.setText(mGuard.emp_id);
         if(mPacketList.size() > 0){
             setupRecyclerView();

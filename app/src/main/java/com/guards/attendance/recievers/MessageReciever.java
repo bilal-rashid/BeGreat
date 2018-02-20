@@ -32,7 +32,7 @@ public class MessageReciever extends BroadcastReceiver {
             // Retrieve the SMS Messages received
             Object[] pdus = (Object[]) bundle.get("pdus");
             String message = SmsMessage.createFromPdu((byte[]) pdus[0]).getMessageBody();
-            if (message.contains("\"" + Constants.UNIQUE_ID + "\"")) {
+            if (message.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                 Packet packet = GsonUtils.fromJson(message, Packet.class);
                 if (packet.status.equals(StatusEnum.EMERGENCY.getName())) {
                     if(LoginUtils.isAdminUserLogin(context)) {
