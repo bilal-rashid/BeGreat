@@ -17,6 +17,7 @@ import com.guards.attendance.fragments.GuardHomeFragment;
 import com.guards.attendance.fragments.HomeFragment;
 import com.guards.attendance.fragments.LoginFragment;
 import com.guards.attendance.fragments.SignupFragment;
+import com.guards.attendance.fragments.SupervisorHomeFragment;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.Constants;
@@ -44,6 +45,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
             }
             else if(LoginUtils.isSupervisorUserLogin(this)){
                 // change it
+                addFragment(new SupervisorHomeFragment());
             }
             else if (LoginUtils.isGuardUserLogin(this)){
                 addFragment(new GuardHomeFragment());

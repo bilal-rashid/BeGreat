@@ -54,4 +54,13 @@ public class AttendanceUtils {
                 StatusEnum.NO_RESPONSE.getName(),AppUtils.getDateAndTime());
         AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
     }
+    public static void checkinSupervisor(Context context){
+        PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,true);
+    }
+    public static boolean isSupervisorCheckin(Context context){
+        return  PrefUtils.getBoolean(context,Constants.SUPERVISOR_CHECKIN,false);
+    }
+    public static void checkoutSupervisor(Context context){
+        PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,false);
+    }
 }
