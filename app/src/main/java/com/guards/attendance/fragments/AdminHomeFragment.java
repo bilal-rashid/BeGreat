@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
@@ -215,7 +213,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     private void Syncdata() {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        List<Packet> list = SmsUtils.getAllPackets(getContext(), true);
+        List<Packet> list = DatabaseUtils.with(database).getLastWeekPackets();
         if (list.size() > 0) {
             Call<ResponseModel> call = apiService.TEST(list);
             call.enqueue(new Callback<ResponseModel>() {

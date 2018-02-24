@@ -2,7 +2,12 @@ package com.guards.attendance.database;
 
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,5 +63,25 @@ public class DatabaseUtils {
     }
     public List<Packet> getAllPackets(){
         return dataBase.packetDao().loadAll();
+    }
+    public List<Packet> getLastWeekPackets(){
+        List<Packet> allPackets = dataBase.packetDao().loadAll();
+        List<Packet> result = new ArrayList<>();
+        for (int i = 0; i < allPackets.size(); i++){
+            Packet temp_packet = allPackets.get(i);
+            Date lastweek = new Date(Calendar.getInstance().getTime().getTime() - (7L * 24L * 60L * 60L * 1000L));
+            Date packetDate = null;
+            try {
+                packetDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(temp_packet.date_time);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            try {
+                if(lastweek.compareTo(packetDate)<1){
+                    result.add(temp_packet);
+                }
+            }catch (Exception e){e.printStackTrace();}
+        }
+        return result;
     }
 }

@@ -5,12 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.guards.attendance.R;
@@ -22,12 +19,6 @@ import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.Constants;
 import com.guards.attendance.utils.GsonUtils;
-import com.guards.attendance.utils.SmsUtils;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
