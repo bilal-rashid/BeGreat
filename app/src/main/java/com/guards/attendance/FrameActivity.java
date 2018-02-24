@@ -41,9 +41,14 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
         } else {
             if(LoginUtils.isAdminUserLogin(this)){
                 addFragment(new AdminHomeFragment());
-            }else if (LoginUtils.isGuardUserLogin(this)){
+            }
+            else if(LoginUtils.isSupervisorUserLogin(this)){
+                // change it
+            }
+            else if (LoginUtils.isGuardUserLogin(this)){
                 addFragment(new GuardHomeFragment());
-            }else {
+            }
+            else {
                 addFragment(new LoginFragment());
             }
         }
