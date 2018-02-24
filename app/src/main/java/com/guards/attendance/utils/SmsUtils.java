@@ -154,7 +154,7 @@ public class SmsUtils {
                 do {
                     String strAddress = cur.getString(index_Address);
                     String strbody = cur.getString(index_Body);
-                    if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
+                    if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"") || strbody.contains("\"" + Constants.UNIQUE_ID_SUPERVISOR + "\"")) {
                         packetList.add(GsonUtils.fromJson(strbody, Packet.class).setNumber(strAddress));
                     }
                 } while (cur.moveToNext());

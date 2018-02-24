@@ -17,7 +17,7 @@ public class Constants {
     public static final String CHECKOUT = "checkout";
     public static final String SUPERVISOR_CHECKIN = "supervisor_checkin";
     public static final String UNIQUE_ID_GUARD = "UTgXclLFLpNaEESvh";
-    public static final String UNIQUE_ID_SUPERVISOR = "PHgKcl1FLpN4EES7q";
+    public static final String UNIQUE_ID_SUPERVISOR = "P2L-p4-S7";
     public static final long INTERVAL = 1000 * 60 * 60;
     public static final String GUARD_DATA = "guard_data";
 

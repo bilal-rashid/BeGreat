@@ -81,12 +81,11 @@ public class Packet {
         this.date_time = date_time;
         this.identifier = Constants.UNIQUE_ID_GUARD;
     }
-    public Packet(String emp_id, String status, String date_time, String location, String number, boolean is_supervisor) {
+    public Packet(String emp_id, String status, String date_time, String location, boolean is_supervisor) {
         this.emp_id = emp_id;
         this.status = status;
         this.date_time = date_time;
         this.location = location;
-        this.number = number;
         if(is_supervisor)
             this.identifier = Constants.UNIQUE_ID_SUPERVISOR;
         else

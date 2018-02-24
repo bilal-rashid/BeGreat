@@ -132,7 +132,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="text"
                         android:textColor="@color/colorPrimary"
-                        android:maxLength="100"
+                        android:maxLength="15"
                         android:padding="@dimen/spacing_large"
                         />
                 </android.support.design.widget.TextInputLayout>
