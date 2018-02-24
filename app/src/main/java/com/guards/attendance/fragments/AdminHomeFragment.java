@@ -25,6 +25,8 @@ import com.guards.attendance.R;
 import com.guards.attendance.adapters.GuardAdapter;
 import com.guards.attendance.api.ApiClient;
 import com.guards.attendance.api.ApiInterface;
+import com.guards.attendance.database.AppDataBase;
+import com.guards.attendance.database.DatabaseUtils;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
@@ -66,6 +68,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
 
         }
     };
+    AppDataBase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,8 +93,11 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        mHolder.progressBar.setVisibility(View.GONE);
+        mHolder.progressBar.setVisibility(View.VISIBLE);
         mHandler = new Handler();
+        database = AppDataBase.getAppDatabase(getContext());
+        DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
+        mHolder.progressBar.setVisibility(View.GONE);
         getMessagesAndPopulateList();
 
     }
@@ -117,7 +123,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                     MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
             return;
         }
-        mGuardList = SmsUtils.getAllGuards(getContext());
+        mGuardList = DatabaseUtils.with(database).getEmployees();
         if (mGuardList.size() > 0) {
             setupRecyclerView();
             populateData(mGuardList);

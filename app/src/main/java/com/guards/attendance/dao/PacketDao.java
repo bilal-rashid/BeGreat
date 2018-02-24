@@ -18,6 +18,9 @@ public interface PacketDao {
     @Insert
     void insert(List<Packet> packets);
 
+    @Insert
+    void insert(Packet packet);
+
     @Update
     void update(Packet... packets);
 
@@ -27,6 +30,6 @@ public interface PacketDao {
     @Query("Select * FROM packet")
     List<Packet> loadAll();
 
-//    @Query("Select * FROM packet WHERE hooman_id == :owner")
-//    Packet[] loadAllCatOwners(int owner);
+    @Query("Select * FROM packet WHERE identifier == :ident AND emp_id == :empid AND status == :status AND date_time == :datetime")
+    Packet[] getPackets(String ident, String empid, String status, String datetime);
 }
