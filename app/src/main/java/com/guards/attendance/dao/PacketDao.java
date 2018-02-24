@@ -32,4 +32,7 @@ public interface PacketDao {
 
     @Query("Select * FROM packet WHERE identifier == :ident AND emp_id == :empid AND status == :status AND date_time == :datetime")
     Packet[] getPackets(String ident, String empid, String status, String datetime);
+
+    @Query("Select * FROM packet WHERE emp_id == :empid")
+    List<Packet> getEmployeePackets(String empid);
 }

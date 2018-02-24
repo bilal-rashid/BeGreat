@@ -53,4 +53,10 @@ public class DatabaseUtils {
         }
         return guardList;
     }
+    public List<Packet> getPacketsOfEmployee(String emp_id){
+        return dataBase.packetDao().getEmployeePackets(emp_id);
+    }
+    public List<Packet> getAllPackets(){
+        return dataBase.packetDao().loadAll();
+    }
 }

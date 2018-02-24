@@ -40,6 +40,7 @@ public class GuardDetailsFragment extends Fragment{
     private Guard mGuard;
     private List<Packet> mPacketList;
     private PacketsAdapter mPacketsAdapter;
+    AppDataBase database;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,8 @@ public class GuardDetailsFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
         manipulateBundle();
-        mPacketList = SmsUtils.getGuardPackets(getContext(),mGuard.number);
+        database = AppDataBase.getAppDatabase(getContext());
+        mPacketList = DatabaseUtils.with(database).getPacketsOfEmployee(mGuard.emp_id);
         mHolder.emp_id_text.setText(mGuard.emp_id);
         if(mPacketList.size() > 0){
             setupRecyclerView();
