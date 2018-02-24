@@ -61,10 +61,6 @@ public class GuardDetailsFragment extends Fragment{
         mHolder = new ViewHolder(view);
         manipulateBundle();
         mPacketList = SmsUtils.getGuardPackets(getContext(),mGuard.number);
-        AppDataBase database = AppDataBase.getAppDatabase(getContext());
-        DatabaseUtils.with(database).addPackets(mPacketList);
-        Log.d("TAAAG",""+database.packetDao().loadAll().size());
-        Log.d("TAAAG",""+GsonUtils.toJson(database.packetDao().loadAll()));
         mHolder.emp_id_text.setText(mGuard.emp_id);
         if(mPacketList.size() > 0){
             setupRecyclerView();
