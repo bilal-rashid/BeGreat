@@ -56,6 +56,8 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     private static final int MY_SMS_REQ_CODE_EMERGENCY = 3;
     private static final int MY_SMS_REQ_CODE_CHECKIN = 4;
     private static final int MY_SMS_REQ_CODE_CHECKOUT = 5;
+    private static final int MY_LOCATION_REQ_CODE_CHECKIN= 6;
+    private static final int MY_LOCATION_REQ_CODE_CHECKOUT= 7;
     private LocationRequest mLocationRequest;
 
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
@@ -181,16 +183,24 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                 new String[]{Manifest.permission.SEND_SMS},
                                                 MY_SMS_REQ_CODE_CHECKIN);
                                     } else {
-                                        mHolder.inputLayoutComment.setEnabled(true);
-                                        mHolder.commentEditText.setEnabled(true);
-                                        mHolder.inputLayoutComment.setHintEnabled(true);
-                                        mHolder.checkinCard.setEnabled(false);
-                                        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                        mHolder.checkoutCard.setEnabled(true);
-                                        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
-                                        AttendanceUtils.checkinSupervisor(getContext());
-                                        startLocationUpdates();
-                                        mSimpleDialog.dismiss();
+                                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                                                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                            mSimpleDialog.dismiss();
+                                            requestPermissions(
+                                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                                                    MY_LOCATION_REQ_CODE_CHECKIN);
+                                        }else {
+                                            mHolder.inputLayoutComment.setEnabled(true);
+                                            mHolder.commentEditText.setEnabled(true);
+                                            mHolder.inputLayoutComment.setHintEnabled(true);
+                                            mHolder.checkinCard.setEnabled(false);
+                                            mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                                            mHolder.checkoutCard.setEnabled(true);
+                                            mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
+                                            AttendanceUtils.checkinSupervisor(getContext());
+                                            startLocationUpdates();
+                                            mSimpleDialog.dismiss();
+                                        }
                                     }
                                     break;
                                 case R.id.button_negative:
@@ -218,16 +228,24 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                 new String[]{Manifest.permission.SEND_SMS},
                                                 MY_SMS_REQ_CODE_CHECKOUT);
                                     } else {
-                                        mHolder.inputLayoutComment.setEnabled(false);
-                                        mHolder.commentEditText.setEnabled(false);
-                                        mHolder.inputLayoutComment.setHintEnabled(false);
-                                        mHolder.checkinCard.setEnabled(true);
-                                        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
-                                        mHolder.checkoutCard.setEnabled(false);
-                                        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                        AttendanceUtils.checkoutSupervisor(getContext());
-                                        startLocationUpdates();
-                                        mSimpleDialog.dismiss();
+                                        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                                                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                            mSimpleDialog.dismiss();
+                                            requestPermissions(
+                                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                                                    MY_LOCATION_REQ_CODE_CHECKOUT);
+                                        }else {
+                                            mHolder.inputLayoutComment.setEnabled(false);
+                                            mHolder.commentEditText.setEnabled(false);
+                                            mHolder.inputLayoutComment.setHintEnabled(false);
+                                            mHolder.checkinCard.setEnabled(true);
+                                            mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
+                                            mHolder.checkoutCard.setEnabled(false);
+                                            mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                                            AttendanceUtils.checkoutSupervisor(getContext());
+                                            startLocationUpdates();
+                                            mSimpleDialog.dismiss();
+                                        }
                                     }
                                     break;
                                 case R.id.button_negative:
@@ -308,11 +326,22 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.checkinCard.setEnabled(false);
-                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                    AttendanceUtils.checkinGuard(getContext());
-                    AttendanceUtils.sendCheckin(getContext());
-                    AppUtils.startPulse(getContext());
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                                MY_LOCATION_REQ_CODE_CHECKIN);
+                    }else {
+                        mHolder.inputLayoutComment.setEnabled(true);
+                        mHolder.commentEditText.setEnabled(true);
+                        mHolder.inputLayoutComment.setHintEnabled(true);
+                        mHolder.checkinCard.setEnabled(false);
+                        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                        mHolder.checkoutCard.setEnabled(true);
+                        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
+                        AttendanceUtils.checkinSupervisor(getContext());
+                        startLocationUpdates();
+                    }
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -324,11 +353,22 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.checkoutCard.setEnabled(false);
-                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                    AttendanceUtils.checkoutGuard(getContext());
-                    AttendanceUtils.sendCheckout(getContext());
-                    AppUtils.stopPulse(getContext());
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                                MY_LOCATION_REQ_CODE_CHECKOUT);
+                    }else {
+                        mHolder.inputLayoutComment.setEnabled(false);
+                        mHolder.commentEditText.setEnabled(false);
+                        mHolder.inputLayoutComment.setHintEnabled(false);
+                        mHolder.checkinCard.setEnabled(true);
+                        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
+                        mHolder.checkoutCard.setEnabled(false);
+                        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                        AttendanceUtils.checkoutSupervisor(getContext());
+                        startLocationUpdates();
+                    }
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -336,11 +376,39 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 }
                 return;
             }
-            case MY_SMS_REQ_CODE_EMERGENCY: {
+            case MY_LOCATION_REQ_CODE_CHECKIN: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    AttendanceUtils.sendEmergency(getContext());
+                    mHolder.inputLayoutComment.setEnabled(true);
+                    mHolder.commentEditText.setEnabled(true);
+                    mHolder.inputLayoutComment.setHintEnabled(true);
+                    mHolder.checkinCard.setEnabled(false);
+                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                    mHolder.checkoutCard.setEnabled(true);
+                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
+                    AttendanceUtils.checkinSupervisor(getContext());
+                    startLocationUpdates();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    AppUtils.showSnackBar(getView(), getString(R.string.err_permission_not_granted));
+                }
+                return;
+            }
+            case MY_LOCATION_REQ_CODE_CHECKOUT: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mHolder.inputLayoutComment.setEnabled(false);
+                    mHolder.commentEditText.setEnabled(false);
+                    mHolder.inputLayoutComment.setHintEnabled(false);
+                    mHolder.checkinCard.setEnabled(true);
+                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
+                    mHolder.checkoutCard.setEnabled(false);
+                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+                    AttendanceUtils.checkoutSupervisor(getContext());
+                    startLocationUpdates();
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -401,14 +469,8 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         settingsClient.checkLocationSettings(locationSettingsRequest);
 
         // new Google API SDK v11 uses getFusedLocationProviderClient(this)
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         LocationServices.getFusedLocationProviderClient(getActivity()).requestLocationUpdates(mLocationRequest, new LocationCallback() {
