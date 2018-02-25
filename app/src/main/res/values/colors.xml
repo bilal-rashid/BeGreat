@@ -10,8 +10,9 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorDividerLine">@color/colorMain</color>
     <!--Tabs-->
-    <color name="colorTabs">#bababa</color>
+    <color name="colorTabs">#999999</color>
     <color name="colorTabsText">#000000</color>
+    <color name="colorTextSelected">#0284be</color>
     <color name="colorTabsIndicator">@color/colorMain</color>
     <!--Bars-->
     <color name="colorToolBarText">#ffffff</color>
