@@ -45,10 +45,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by Bilal Rashid on 1/20/2018.
+ * Created by Bilal Rashid on 2/26/2018.
  */
 
-public class AdminHomeFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
+public class AdminSupervisorsFragment  extends Fragment implements View.OnClickListener, OnItemClickListener {
 
     private ViewHolder mHolder;
     private List<Guard> mGuardList;
@@ -77,14 +77,11 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitleAdmin("Admin", true);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+        return inflater.inflate(R.layout.fragment_supervisor_admin, container, false);
     }
 
     @Override

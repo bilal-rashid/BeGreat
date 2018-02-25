@@ -11,12 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.guards.attendance.dialog.SimpleDialog;
-import com.guards.attendance.fragments.AdminHomeFragment;
+import com.guards.attendance.fragments.AdminFragment;
 import com.guards.attendance.fragments.AlarmFragment;
 import com.guards.attendance.fragments.GuardHomeFragment;
-import com.guards.attendance.fragments.HomeFragment;
 import com.guards.attendance.fragments.LoginFragment;
-import com.guards.attendance.fragments.SignupFragment;
 import com.guards.attendance.fragments.SupervisorHomeFragment;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
@@ -41,7 +39,7 @@ public class FrameActivity extends AppCompatActivity implements ToolbarListener 
             addFragment(fragment);
         } else {
             if(LoginUtils.isAdminUserLogin(this)){
-                addFragment(new AdminHomeFragment());
+                addFragment(new AdminFragment());
             }
             else if(LoginUtils.isSupervisorUserLogin(this)){
                 // change it
