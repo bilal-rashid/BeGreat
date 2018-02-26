@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.toolbox.OnItemClickListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,9 +28,11 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
 
     private List<Packet> mItems = new ArrayList<>();
     SimpleDateFormat format;
+    OnItemClickListener mItemclickListener;
 
-    public PacketsAdapter() {
+    public PacketsAdapter(OnItemClickListener onItemClickListener) {
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        this.mItemclickListener = onItemClickListener;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder,final int position) {
         Date date;
         try {
             date = format.parse(mItems.get(position).date_time);
@@ -66,6 +69,12 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
         }else {
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_emergency));
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemclickListener.onItemClick(view,mItems.get(position),position);
+            }
+        });
 
     }
 

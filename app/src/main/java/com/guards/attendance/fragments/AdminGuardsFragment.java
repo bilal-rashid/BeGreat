@@ -48,7 +48,7 @@ import retrofit2.Response;
  * Created by Bilal Rashid on 1/20/2018.
  */
 
-public class AdminHomeFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
+public class AdminGuardsFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
 
     private ViewHolder mHolder;
     private List<Guard> mGuardList;
@@ -77,25 +77,20 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitleAdmin("Admin", true);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+        return inflater.inflate(R.layout.fragment_guard_admin, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        mHolder.progressBar.setVisibility(View.VISIBLE);
+        mHolder.progressBar.setVisibility(View.GONE);
         mHandler = new Handler();
         database = AppDataBase.getAppDatabase(getContext());
-        DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
-        mHolder.progressBar.setVisibility(View.GONE);
         getMessagesAndPopulateList();
 
     }
@@ -121,7 +116,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                     MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
             return;
         }
-        mGuardList = DatabaseUtils.with(database).getEmployees();
+        mGuardList = DatabaseUtils.with(database).getGuards();
         if (mGuardList.size() > 0) {
             setupRecyclerView();
             populateData(mGuardList);

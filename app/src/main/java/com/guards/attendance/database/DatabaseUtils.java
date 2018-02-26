@@ -2,6 +2,7 @@ package com.guards.attendance.database;
 
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,5 +84,33 @@ public class DatabaseUtils {
             }catch (Exception e){e.printStackTrace();}
         }
         return result;
+    }
+    public List<Guard> getGuards(){
+        List<Guard> guardList = new ArrayList<>();
+        List<Packet> packetList = dataBase.packetDao().loadAllEmployees(Constants.UNIQUE_ID_GUARD);
+        HashMap<String, String> hashMap = new HashMap<>();
+        for(int i=0;i<packetList.size();i++){
+            hashMap.put(packetList.get(i).emp_id,packetList.get(i).number);
+        }
+        if (hashMap.size() > 0) {
+            for (int i = 0; i < hashMap.size(); i++) {
+                guardList.add(new Guard(hashMap.values().toArray()[i] + "", hashMap.keySet().toArray()[i] + ""));
+            }
+        }
+        return guardList;
+    }
+    public List<Guard> getSupervisors(){
+        List<Guard> guardList = new ArrayList<>();
+        List<Packet> packetList = dataBase.packetDao().loadAllEmployees(Constants.UNIQUE_ID_SUPERVISOR);
+        HashMap<String, String> hashMap = new HashMap<>();
+        for(int i=0;i<packetList.size();i++){
+            hashMap.put(packetList.get(i).emp_id,packetList.get(i).number);
+        }
+        if (hashMap.size() > 0) {
+            for (int i = 0; i < hashMap.size(); i++) {
+                guardList.add(new Guard(hashMap.values().toArray()[i] + "", hashMap.keySet().toArray()[i] + ""));
+            }
+        }
+        return guardList;
     }
 }

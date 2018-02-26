@@ -79,9 +79,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             LoginUtils.loginAdmin(getContext());
             Toast.makeText(getContext(),"Admin Logged in",Toast.LENGTH_SHORT).show();
             ActivityUtils.startActivity(getActivity(), FrameActivity.class,
-                    AdminHomeFragment.class.getName(), null);
+                    AdminFragment.class.getName(), null);
             getActivity().finish();
-        }else if (LoginUtils.authenticateGuard(getContext(),mHolder.usernameEditText.getText().toString(),
+        }
+        else if(LoginUtils.authenticateSupervisor(getContext(),mHolder.usernameEditText.getText().toString(),
+                mHolder.passwordEditText.getText().toString())){
+            LoginUtils.loginSupervisor(getContext());
+            Toast.makeText(getContext(),"Supervisor Logged in",Toast.LENGTH_SHORT).show();
+            ActivityUtils.startActivity(getActivity(), FrameActivity.class,
+                    SupervisorHomeFragment.class.getName(), null);
+            getActivity().finish();
+        }
+        else if (LoginUtils.authenticateGuard(getContext(),mHolder.usernameEditText.getText().toString(),
                 mHolder.passwordEditText.getText().toString())){
             LoginUtils.loginGuard(getContext());
             Toast.makeText(getContext(),"Guard Logged in",Toast.LENGTH_SHORT).show();
