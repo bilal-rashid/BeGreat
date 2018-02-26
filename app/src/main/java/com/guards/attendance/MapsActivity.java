@@ -27,10 +27,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         manipulateBundle();
-        String[] separated = mPacket.getLocation().split("-");
-        title = separated[0];
-        latitude = Double.parseDouble(separated[1]);
-        longitude = Double.parseDouble(separated[2]);
+        try {
+            String[] separated = mPacket.getLocation().split("-");
+            title = separated[0];
+            latitude = Double.parseDouble(separated[1]);
+            longitude = Double.parseDouble(separated[2]);
+        }catch (Exception e){
+            title = "location corrupted";
+            latitude = Double.parseDouble("31.5");
+            longitude = Double.parseDouble("74.3");
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

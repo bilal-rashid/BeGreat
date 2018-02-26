@@ -91,7 +91,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Ad
                 mHolder.userTypeSpinner.setSelection(0);
             else
                 mHolder.userTypeSpinner.setSelection(1);
-//            mHolder.userTypeSpinner.setEnabled(false);
+            mHolder.userTypeSpinner.setEnabled(false);
         }
         is_supervisor = true;
     }
