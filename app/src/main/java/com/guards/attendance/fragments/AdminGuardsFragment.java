@@ -88,11 +88,9 @@ public class AdminGuardsFragment extends Fragment implements View.OnClickListene
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
-        mHolder.progressBar.setVisibility(View.VISIBLE);
+        mHolder.progressBar.setVisibility(View.GONE);
         mHandler = new Handler();
         database = AppDataBase.getAppDatabase(getContext());
-        DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
-        mHolder.progressBar.setVisibility(View.GONE);
         getMessagesAndPopulateList();
 
     }
@@ -118,7 +116,7 @@ public class AdminGuardsFragment extends Fragment implements View.OnClickListene
                     MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
             return;
         }
-        mGuardList = DatabaseUtils.with(database).getEmployees();
+        mGuardList = DatabaseUtils.with(database).getGuards();
         if (mGuardList.size() > 0) {
             setupRecyclerView();
             populateData(mGuardList);

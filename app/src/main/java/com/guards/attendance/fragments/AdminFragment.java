@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.PagerAdapter;
+import com.guards.attendance.database.AppDataBase;
+import com.guards.attendance.database.DatabaseUtils;
 import com.guards.attendance.toolbox.ToolbarListener;
+import com.guards.attendance.utils.SmsUtils;
 
 /**
  * Created by Bilal Rashid on 2/25/2018.
@@ -21,8 +23,8 @@ import com.guards.attendance.toolbox.ToolbarListener;
 public class AdminFragment extends Fragment{
     private ViewHolder mHolder;
     private PagerAdapter pagerAdapter;
-    private ActionBar actionBar;
-    private String[] tabs = { "Top Rated", "Games"};
+    AppDataBase database;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,8 @@ public class AdminFragment extends Fragment{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
+        database = AppDataBase.getAppDatabase(getContext());
+        DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
         if (mHolder.viewPager != null) {
             setupViewPager(mHolder.viewPager);
         }

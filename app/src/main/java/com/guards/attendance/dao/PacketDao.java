@@ -35,4 +35,7 @@ public interface PacketDao {
 
     @Query("Select * FROM packet WHERE emp_id == :empid")
     List<Packet> getEmployeePackets(String empid);
+
+    @Query("Select * FROM packet WHERE identifier == :identifier")
+    List<Packet> loadAllEmployees(String identifier);
 }
