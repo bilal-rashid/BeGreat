@@ -48,6 +48,12 @@ public class ActivityUtils {
         context.startActivity(intent);
         context.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+    public static void startActivity(Activity context, Class<?> class_, Bundle bundle) {
+        Intent intent = new Intent(context, class_);
+        intent.putExtra(Constants.DATA, bundle);
+        context.startActivity(intent);
+        context.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
 
 
     public static void startActivity(Context context, Class<?> class_, String fragmentName, Bundle bundle) {

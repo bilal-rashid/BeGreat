@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.guards.attendance.MapsActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.PacketsAdapter;
 import com.guards.attendance.database.AppDataBase;
@@ -19,6 +20,7 @@ import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
+import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.Constants;
 import com.guards.attendance.utils.GsonUtils;
 
@@ -93,8 +95,8 @@ public class SupervisorDetailsFragment extends Fragment implements OnItemClickLi
     public void onItemClick(View view, Object data, int position) {
         Packet packet = (Packet) data;
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(packet));
-        Log.d("TAAAG",""+GsonUtils.toJson(packet));
+        bundle.putString(Constants.PACKET_DATA, GsonUtils.toJson(packet));
+        ActivityUtils.startActivity(getActivity(), MapsActivity.class,bundle);
     }
 
     public static class ViewHolder {

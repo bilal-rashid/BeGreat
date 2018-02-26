@@ -7,6 +7,7 @@ package com.guards.attendance.utils;
 public class Constants {
     public static final String FRAGMENT_NAME = "fragment name";
     public static final String DATA = "data";
+    public static final String PACKET_DATA = "packet_data";
     public static final String USER= "user";
     public static final String USER_ADMIN = "user_admin";
     public static final String USER_ADMIN_lOGIN = "user_admin_login";
