@@ -19,6 +19,9 @@ import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.Constants;
 import com.guards.attendance.utils.GsonUtils;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -54,6 +57,12 @@ public class GuardDetailsFragment extends Fragment{
         manipulateBundle();
         database = AppDataBase.getAppDatabase(getContext());
         mPacketList = DatabaseUtils.with(database).getPacketsOfEmployee(mGuard.emp_id);
+        Collections.sort(mPacketList, new Comparator<Packet>() {
+            @Override
+            public int compare(Packet packet, Packet t1) {
+                return t1.compare(packet);
+            }
+        });
         mHolder.emp_id_text.setText(mGuard.emp_id);
         if(mPacketList.size() > 0){
             setupRecyclerView();
