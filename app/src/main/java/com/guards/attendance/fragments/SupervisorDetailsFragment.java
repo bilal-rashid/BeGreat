@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,10 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by Bilal Rashid on 1/28/2018.
+ * Created by Bilal Rashid on 2/26/2018.
  */
 
-public class GuardDetailsFragment extends Fragment implements OnItemClickListener{
+public class SupervisorDetailsFragment extends Fragment implements OnItemClickListener{
 
     private ViewHolder mHolder;
     private Guard mGuard;
@@ -45,7 +46,7 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitle("Guard Attendance",false);
+            ((ToolbarListener) context).setTitle("Supervisor Attendance",false);
         }
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +91,10 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
 
     @Override
     public void onItemClick(View view, Object data, int position) {
-
+        Packet packet = (Packet) data;
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(packet));
+        Log.d("TAAAG",""+GsonUtils.toJson(packet));
     }
 
     public static class ViewHolder {

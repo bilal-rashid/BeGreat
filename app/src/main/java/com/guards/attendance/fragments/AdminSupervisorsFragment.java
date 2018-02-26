@@ -147,7 +147,7 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
         Guard guard = (Guard) data;
         Bundle bundle = new Bundle();
         bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(guard));
-        ActivityUtils.startActivity(getActivity(), FrameActivity.class, GuardDetailsFragment.class.getName(), bundle);
+        ActivityUtils.startActivity(getActivity(), FrameActivity.class, SupervisorDetailsFragment.class.getName(), bundle);
     }
 
     public static class ViewHolder {
