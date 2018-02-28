@@ -8,6 +8,7 @@
     <string name="admin_number">+923345505421</string>
     <!--production-->
     <!--<string name="admin_number">07708827484</string>-->
+    <!--<string name="admin_number">00233552523746</string>-->
     <!--staging-->
     <!--<string name="admin_number">+923315685601</string>-->
     <string name="err_image_not_selected">"You haven't picked a profile image"</string>
