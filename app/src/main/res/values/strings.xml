@@ -6,8 +6,11 @@
     <string name="admin_password">12345</string>
     <!--dev-->
     <string name="admin_number">+923345505421</string>
-    <!--production-->
+    <!--production1-->
     <!--<string name="admin_number">07708827484</string>-->
+    <!--production2-->
+    <!--<string name="admin_number">+447399279041</string>-->
+    <!--production3-->
     <!--<string name="admin_number">00233552523746</string>-->
     <!--staging-->
     <!--<string name="admin_number">+923315685601</string>-->
