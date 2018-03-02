@@ -32,6 +32,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             title = separated[0];
             latitude = Double.parseDouble(separated[1]);
             longitude = Double.parseDouble(separated[2]);
+            if(mPacket!=null){
+                if(mPacket.getStatus().equals(StatusEnum.CHECKIN.getName())){
+                    title = StatusEnum.CHECKIN.getName();
+                }
+            }
         }catch (Exception e){
             title = "location corrupted";
             latitude = Double.parseDouble("31.5");
@@ -65,11 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(latitude, longitude);
-        if(mPacket!=null){
-            if(mPacket.getStatus().equals(StatusEnum.CHECKIN.getName())){
-                title = StatusEnum.CHECKIN.getName();
-            }
-        }
         mMap.addMarker(new MarkerOptions().position(sydney).title(title));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
