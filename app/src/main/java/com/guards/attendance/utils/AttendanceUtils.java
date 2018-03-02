@@ -67,12 +67,12 @@ public class AttendanceUtils {
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKIN.getName(),AppUtils.getDateAndTime(),location,true);
         AppUtils.sendSMS(context.getString(R.string.admin_number),
-                GsonUtils.toJson(packet).replace("\"packetId\":0,",""));
+                GsonUtils.toJson(packet).replace(",\"packetId\":0",""),context);
     }
     public static void sendSupervisorCheckout(Context context, String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKOUT.getName(),AppUtils.getDateAndTime(),location,true);
         AppUtils.sendSMS(context.getString(R.string.admin_number),
-                GsonUtils.toJson(packet).replace("\"packetId\":0,",""));
+                GsonUtils.toJson(packet).replace(",\"packetId\":0",""),context);
     }
 }
