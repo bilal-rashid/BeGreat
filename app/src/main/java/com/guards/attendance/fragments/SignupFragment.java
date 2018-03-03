@@ -84,14 +84,14 @@ public class SignupFragment extends Fragment implements View.OnClickListener, Ad
         User user = LoginUtils.getUser(getContext());
         if(user != null){
             mHolder.empEditText.setText(user.employee_code);
-            mHolder.empEditText.setEnabled(false);
+//            mHolder.empEditText.setEnabled(false);
             mHolder.usernameEditText.setText(user.username);
-            mHolder.usernameEditText.setEnabled(false);
+//            mHolder.usernameEditText.setEnabled(false);
             if(user.is_supervisor)
                 mHolder.userTypeSpinner.setSelection(0);
             else
                 mHolder.userTypeSpinner.setSelection(1);
-            mHolder.userTypeSpinner.setEnabled(false);
+//            mHolder.userTypeSpinner.setEnabled(false);
         }
         is_supervisor = true;
     }

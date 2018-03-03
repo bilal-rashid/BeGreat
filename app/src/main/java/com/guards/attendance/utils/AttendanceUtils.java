@@ -30,30 +30,30 @@ public class AttendanceUtils {
     public static boolean isGuardCheckout(Context context){
         return  PrefUtils.getBoolean(context,getCheckoutKey(),false);
     }
-    public static void sendCheckin(Context context){
+    public static void sendCheckin(Context context,SmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKIN.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
+        AppUtils.sendCheckin(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
     }
-    public static void sendCheckout(Context context){
+    public static void sendCheckout(Context context,SmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKOUT.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
+        AppUtils.sendCheckout(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
     }
     public static void sendEmergency(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.EMERGENCY.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
     }
     public static void sendResponded(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.RESPONSE.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
     }
     public static void sendNotResponded(Context context){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.NO_RESPONSE.getName(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet));
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
     }
     public static void checkinSupervisor(Context context){
         PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,true);
@@ -67,11 +67,15 @@ public class AttendanceUtils {
     public static void sendSupervisorCheckin(Context context, String location, SmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKIN.getName(),AppUtils.getDateAndTime(),location,true);
-        AppUtils.sendSupervisorCheckin(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
+        AppUtils.sendCheckin(context.getString(R.string.admin_number),
+                GsonUtils.toJson(packet).replace(",\"packetId\":0","").replace("\"packetId\":0,",""),
+                context,listener);
     }
     public static void sendSupervisorCheckout(Context context, String location, SmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKOUT.getName(),AppUtils.getDateAndTime(),location,true);
-        AppUtils.sendSupervisorCheckout(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
+        AppUtils.sendCheckout(context.getString(R.string.admin_number),
+                GsonUtils.toJson(packet).replace(",\"packetId\":0","").replace("\"packetId\":0,",""),
+                context,listener);
     }
 }
