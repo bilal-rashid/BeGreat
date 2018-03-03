@@ -37,7 +37,7 @@ public class DatabaseUtils {
     public void addPacketsToDB(List<Packet> packetList){
         for (int i =0; i < packetList.size();i++) {
             Packet current = packetList.get(i);
-            Packet[] temp = dataBase.packetDao().getPackets(current.getIdentifier(),
+            Packet[] temp = dataBase.packetDao().getPackets(current.getU_id(),
                     current.getEmp_id(),current.getStatus(),current.getDate_time());
             if(temp == null || temp.length ==0 ){
                 dataBase.packetDao().insert(current);
@@ -73,7 +73,7 @@ public class DatabaseUtils {
             Date lastweek = new Date(Calendar.getInstance().getTime().getTime() - (7L * 24L * 60L * 60L * 1000L));
             Date packetDate = null;
             try {
-                packetDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(temp_packet.date_time);
+                packetDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(temp_packet.date_time);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

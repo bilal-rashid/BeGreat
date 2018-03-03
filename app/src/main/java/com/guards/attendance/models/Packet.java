@@ -17,16 +17,16 @@ import java.util.Date;
 public class Packet {
     @PrimaryKey(autoGenerate = true)
     public int packetId;
-    @ColumnInfo(name = "identifier")
-    public String identifier;
+    @ColumnInfo(name = "u_id")
+    public String u_id;
     @ColumnInfo(name = "emp_id")
     public String emp_id;
     @ColumnInfo(name = "status")
     public String status;
     @ColumnInfo(name = "date_time")
     public String date_time;
-    @ColumnInfo(name = "location")
-    public String location;
+    @ColumnInfo(name = "point")
+    public String point;
     @ColumnInfo(name = "number")
     public String number;
 
@@ -39,12 +39,12 @@ public class Packet {
         return this;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getU_id() {
+        return u_id;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setU_id(String u_id) {
+        this.u_id = u_id;
     }
 
     public String getEmp_id() {
@@ -71,37 +71,37 @@ public class Packet {
         this.date_time = date_time;
     }
 
-    public String getLocation() {
-        return location;
+    public String getPoint() {
+        return point;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setPoint(String point) {
+        this.point = point;
     }
 
     public Packet(String emp_id, String status, String date_time) {
         this.emp_id = emp_id;
         this.status = status;
         this.date_time = date_time;
-        this.identifier = Constants.UNIQUE_ID_GUARD;
+        this.u_id = Constants.UNIQUE_ID_GUARD;
     }
 
-    public Packet(String emp_id, String status, String date_time, String location, boolean is_supervisor) {
+    public Packet(String emp_id, String status, String date_time, String point, boolean is_supervisor) {
         this.emp_id = emp_id;
         this.status = status;
         this.date_time = date_time;
-        this.location = location;
+        this.point = point;
         if (is_supervisor)
-            this.identifier = Constants.UNIQUE_ID_SUPERVISOR;
+            this.u_id = Constants.UNIQUE_ID_SUPERVISOR;
         else
-            this.identifier = Constants.UNIQUE_ID_GUARD;
+            this.u_id = Constants.UNIQUE_ID_GUARD;
     }
     public int compare(Packet packet) {
         Date packetDate = null;
         Date thisDate= null;
         try {
-            packetDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(packet.date_time);
-            thisDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.date_time);
+            packetDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(packet.date_time);
+            thisDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(this.date_time);
             return thisDate.compareTo(packetDate);
         } catch (ParseException e) {
             e.printStackTrace();

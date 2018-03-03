@@ -28,12 +28,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         manipulateBundle();
         try {
-            String[] separated = mPacket.getLocation().split("-");
+            String[] separated = mPacket.getPoint().split("-");
             title = separated[0];
             latitude = Double.parseDouble(separated[1]);
             longitude = Double.parseDouble(separated[2]);
             if(mPacket!=null){
-                if(mPacket.getStatus().equals(StatusEnum.CHECKIN.getName())){
+                if(mPacket.getStatus().equals(StatusEnum.CHECKIN.getValue())){
                     title = StatusEnum.CHECKIN.getName();
                 }
             }

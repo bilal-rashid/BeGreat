@@ -151,7 +151,7 @@ public class AppUtils {
     }
     public static String getDateAndTime(){
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
         return df.format(c.getTime());
     }
     public static void vibrate(Context context){

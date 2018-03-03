@@ -34,7 +34,7 @@ public class MessageReciever extends BroadcastReceiver {
             String message = SmsMessage.createFromPdu((byte[]) pdus[0]).getMessageBody();
             if (message.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                 Packet packet = GsonUtils.fromJson(message, Packet.class);
-                if (packet.status.equals(StatusEnum.EMERGENCY.getName())) {
+                if (packet.status.equals(StatusEnum.EMERGENCY.getValue())) {
                     if(LoginUtils.isAdminUserLogin(context)) {
                         Log.d("TAAAG", "emergency");
                         PowerManager.WakeLock screenLock = ((PowerManager) context.getSystemService(POWER_SERVICE)).newWakeLock(
