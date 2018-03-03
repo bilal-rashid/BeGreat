@@ -172,7 +172,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                     buildAlertMessageNoGps();
                 } else {
 
-                    mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkin),
+                    mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkin_supervisor),
                             getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -210,7 +210,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     buildAlertMessageNoGps();
                 } else {
-                    mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkout),
+                    mSimpleDialog = new SimpleDialog(getContext(), null, getString(R.string.msg_checkout_supervisor),
                             getString(R.string.button_cancel), getString(R.string.button_ok), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -470,7 +470,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
                         counter++;
-                        if(counter > 2) {
+                        if(counter > 1) {
                             onLocationChanged(locationResult.getLastLocation());
                             LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
                         }
