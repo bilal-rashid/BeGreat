@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -39,6 +38,7 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.User;
+import com.guards.attendance.toolbox.SupervisorSmsListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
@@ -49,7 +49,7 @@ import com.guards.attendance.utils.LoginUtils;
  * Created by Bilal Rashid on 2/24/2018.
  */
 
-public class SupervisorHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
+public class SupervisorHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener,SupervisorSmsListener {
     private ViewHolder mHolder;
     private User mUser;
     private SimpleDialog mSimpleDialog;
@@ -60,8 +60,9 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     private static final int MY_LOCATION_REQ_CODE_CHECKOUT= 7;
     private LocationRequest mLocationRequest;
 
-    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    private long UPDATE_INTERVAL = 1000;  /* 1 sec */
+    private long FASTEST_INTERVAL = 500; /* 1/2 sec */
+    public static int counter = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -190,13 +191,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKIN);
                                         }else {
-                                            mHolder.inputLayoutComment.setEnabled(true);
-                                            mHolder.commentEditText.setEnabled(true);
-                                            mHolder.inputLayoutComment.setHintEnabled(true);
-                                            mHolder.checkinCard.setEnabled(false);
-                                            mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                            mHolder.checkoutCard.setEnabled(true);
-                                            mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
                                             AttendanceUtils.checkinSupervisor(getContext());
                                             startLocationUpdates();
                                             mSimpleDialog.dismiss();
@@ -235,13 +229,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKOUT);
                                         }else {
-                                            mHolder.inputLayoutComment.setEnabled(false);
-                                            mHolder.commentEditText.setEnabled(false);
-                                            mHolder.inputLayoutComment.setHintEnabled(false);
-                                            mHolder.checkinCard.setEnabled(true);
-                                            mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
-                                            mHolder.checkoutCard.setEnabled(false);
-                                            mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
                                             AttendanceUtils.checkoutSupervisor(getContext());
                                             startLocationUpdates();
                                             mSimpleDialog.dismiss();
@@ -298,6 +285,38 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         }
     }
 
+    @Override
+    public void onCheckinSuccess() {
+        mHolder.inputLayoutComment.setEnabled(true);
+        mHolder.commentEditText.setEnabled(true);
+        mHolder.inputLayoutComment.setHintEnabled(true);
+        mHolder.checkinCard.setEnabled(false);
+        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        mHolder.checkoutCard.setEnabled(true);
+        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
+    }
+
+    @Override
+    public void onCheckinFailure() {
+        AttendanceUtils.checkoutSupervisor(getContext());
+    }
+
+    @Override
+    public void onCheckoutSuccess() {
+        mHolder.inputLayoutComment.setEnabled(false);
+        mHolder.commentEditText.setEnabled(false);
+        mHolder.inputLayoutComment.setHintEnabled(false);
+        mHolder.checkinCard.setEnabled(true);
+        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
+        mHolder.checkoutCard.setEnabled(false);
+        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+    }
+
+    @Override
+    public void onCheckoutFailure() {
+        AttendanceUtils.checkinSupervisor(getContext());
+    }
+
     public static class ViewHolder {
         ImageView profileImage;
         TextView usernameText, empCodeText;
@@ -332,13 +351,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKIN);
                     }else {
-                        mHolder.inputLayoutComment.setEnabled(true);
-                        mHolder.commentEditText.setEnabled(true);
-                        mHolder.inputLayoutComment.setHintEnabled(true);
-                        mHolder.checkinCard.setEnabled(false);
-                        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                        mHolder.checkoutCard.setEnabled(true);
-                        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
                         AttendanceUtils.checkinSupervisor(getContext());
                         startLocationUpdates();
                     }
@@ -359,13 +371,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKOUT);
                     }else {
-                        mHolder.inputLayoutComment.setEnabled(false);
-                        mHolder.commentEditText.setEnabled(false);
-                        mHolder.inputLayoutComment.setHintEnabled(false);
-                        mHolder.checkinCard.setEnabled(true);
-                        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
-                        mHolder.checkoutCard.setEnabled(false);
-                        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
                         AttendanceUtils.checkoutSupervisor(getContext());
                         startLocationUpdates();
                     }
@@ -380,13 +385,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.inputLayoutComment.setEnabled(true);
-                    mHolder.commentEditText.setEnabled(true);
-                    mHolder.inputLayoutComment.setHintEnabled(true);
-                    mHolder.checkinCard.setEnabled(false);
-                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                    mHolder.checkoutCard.setEnabled(true);
-                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
                     AttendanceUtils.checkinSupervisor(getContext());
                     startLocationUpdates();
                 } else {
@@ -400,13 +398,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.inputLayoutComment.setEnabled(false);
-                    mHolder.commentEditText.setEnabled(false);
-                    mHolder.inputLayoutComment.setHintEnabled(false);
-                    mHolder.checkinCard.setEnabled(true);
-                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
-                    mHolder.checkoutCard.setEnabled(false);
-                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
                     AttendanceUtils.checkoutSupervisor(getContext());
                     startLocationUpdates();
                 } else {
@@ -423,6 +414,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
 
     public void onLocationChanged(Location location) {
         // New location has now been determined
+        counter = 0;
         String msg;
         if (mHolder.commentEditText.getText().toString().length() > 0) {
             msg = mHolder.commentEditText.getText().toString() + "-" +
@@ -435,9 +427,9 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         }
         Log.d("TAAAG", "" + msg);
         if (AttendanceUtils.isSupervisorCheckin(getContext())) {
-            AttendanceUtils.sendSupervisorCheckin(getContext(), msg);
+            AttendanceUtils.sendSupervisorCheckin(getContext(), msg,this);
         } else {
-            AttendanceUtils.sendSupervisorCheckout(getContext(), msg);
+            AttendanceUtils.sendSupervisorCheckout(getContext(), msg,this);
         }
         mHolder.commentEditText.setText("");
 
@@ -477,8 +469,11 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
                         // do work here
-                        onLocationChanged(locationResult.getLastLocation());
-                        LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                        counter++;
+                        if(counter > 2) {
+                            onLocationChanged(locationResult.getLastLocation());
+                            LocationServices.getFusedLocationProviderClient(getActivity()).removeLocationUpdates(this);
+                        }
                     }
                 },
                 Looper.myLooper());

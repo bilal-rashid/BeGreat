@@ -5,6 +5,7 @@ import android.content.Context;
 import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.toolbox.SupervisorSmsListener;
 
 /**
  * Created by Bilal Rashid on 1/21/2018.
@@ -63,16 +64,14 @@ public class AttendanceUtils {
     public static void checkoutSupervisor(Context context){
         PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,false);
     }
-    public static void sendSupervisorCheckin(Context context, String location){
+    public static void sendSupervisorCheckin(Context context, String location, SupervisorSmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKIN.getName(),AppUtils.getDateAndTime(),location,true);
-        AppUtils.sendSMS(context.getString(R.string.admin_number),
-                GsonUtils.toJson(packet).replace(",\"packetId\":0",""),context);
+        AppUtils.sendSupervisorCheckin(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
     }
-    public static void sendSupervisorCheckout(Context context, String location){
+    public static void sendSupervisorCheckout(Context context, String location, SupervisorSmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.CHECKOUT.getName(),AppUtils.getDateAndTime(),location,true);
-        AppUtils.sendSMS(context.getString(R.string.admin_number),
-                GsonUtils.toJson(packet).replace(",\"packetId\":0",""),context);
+        AppUtils.sendSupervisorCheckout(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
     }
 }

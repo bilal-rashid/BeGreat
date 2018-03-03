@@ -1,9 +1,12 @@
 package com.guards.attendance.utils;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.AudioManager;
@@ -27,6 +30,7 @@ import android.widget.Toast;
 
 import com.guards.attendance.R;
 import com.guards.attendance.recievers.PulseReciever;
+import com.guards.attendance.toolbox.SupervisorSmsListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -215,5 +219,118 @@ public class AppUtils {
     public static void makeToast(Context context, String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
+    public static String getCheckinKey(){
+        return Constants.CHECKIN+AppUtils.getDate();
+    }
+    public static String getCheckoutKey(){
+        return Constants.CHECKOUT+AppUtils.getDate();
+    }
+    public static void cancelCheckinGuard(Context context){
+        PrefUtils.persistBoolean(context,getCheckinKey(),false);
+    }
+    public static void cancelCheckoutGuard(Context context){
+        PrefUtils.persistBoolean(context,getCheckoutKey(),false);
+    }
+    public static void sendSupervisorCheckin(String phoneNo, String msg, final Context context, final SupervisorSmsListener listener) {
+        msg = msg.replace(",\"packetId\":0","").replace("\"packetId\":0,","");
+        try {
+            String SENT = "SMS_SENT";
+            String DELIVERED = "SMS_DELIVERED";
 
+            PendingIntent sentPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(SENT), 0);
+
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(DELIVERED), 0);
+
+            //---when the SMS has been sent---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            Toast.makeText(context, "SMS sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onCheckinSuccess();
+                            break;
+                        default:
+                            Toast.makeText(context, "Failed! sms not sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onCheckinFailure();
+                            break;
+                    }
+                }
+            }, new IntentFilter(SENT));
+
+            //---when the SMS has been delivered---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            break;
+                    }
+                }
+            }, new IntentFilter(DELIVERED));
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, sentPI, deliveredPI);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public static void sendSupervisorCheckout(String phoneNo, String msg, final Context context, final SupervisorSmsListener listener) {
+        msg = msg.replace(",\"packetId\":0","").replace("\"packetId\":0,","");
+        try {
+            String SENT = "SMS_SENT";
+            String DELIVERED = "SMS_DELIVERED";
+
+            PendingIntent sentPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(SENT), 0);
+
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(DELIVERED), 0);
+
+            //---when the SMS has been sent---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            Toast.makeText(context, "SMS sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onCheckoutSuccess();
+                            break;
+                        default:
+                            Toast.makeText(context, "Failed! sms not sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onCheckoutFailure();
+                            break;
+                    }
+                }
+            }, new IntentFilter(SENT));
+
+            //---when the SMS has been delivered---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            break;
+                    }
+                }
+            }, new IntentFilter(DELIVERED));
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, sentPI, deliveredPI);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
