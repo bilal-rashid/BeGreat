@@ -153,6 +153,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                             new String[]{Manifest.permission.SEND_SMS},
                                             MY_SMS_REQ_CODE_CHECKIN);
                                 }else {
+                                    checkinViews();
                                     AttendanceUtils.sendCheckin(getContext(),GuardHomeFragment.this);
                                     mSimpleDialog.dismiss();
                                 }
@@ -178,6 +179,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                             new String[]{Manifest.permission.SEND_SMS},
                                             MY_SMS_REQ_CODE_CHECKOUT);
                                 }else {
+                                    checkoutViews();
                                     AttendanceUtils.sendCheckout(getContext(),GuardHomeFragment.this);
                                     AppUtils.stopPulse(getContext());
                                     mSimpleDialog.dismiss();
@@ -234,30 +236,44 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
 
         }
     }
+    public void checkinViews(){
+        mHolder.checkinCard.setEnabled(false);
+        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+    }
+    public void checkinFailedViews(){
+        mHolder.checkinCard.setEnabled(true);
+        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
+    }
+    public void checkoutViews(){
+        mHolder.checkoutCard.setEnabled(false);
+        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+    }
+    public void checkoutFailedViews(){
+        mHolder.checkoutCard.setEnabled(true);
+        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
+    }
 
     @Override
     public void onCheckinSuccess() {
-        mHolder.checkinCard.setEnabled(false);
-        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        checkinViews();
         AttendanceUtils.checkinGuard(getContext());
         AppUtils.startPulse(getContext());
     }
 
     @Override
     public void onCheckinFailure() {
-
+        checkinFailedViews();
     }
 
     @Override
     public void onCheckoutSuccess() {
-        mHolder.checkoutCard.setEnabled(false);
-        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+        checkoutViews();
         AttendanceUtils.checkoutGuard(getContext());
     }
 
     @Override
     public void onCheckoutFailure() {
-
+        checkoutFailedViews();
     }
 
     public static class ViewHolder {
@@ -283,6 +299,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkinViews();
                     AttendanceUtils.sendCheckin(getContext(),this);
                 } else {
                     // permission denied, boo! Disable the
@@ -295,6 +312,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkoutViews();
                     AttendanceUtils.sendCheckout(getContext(),this);
                     AppUtils.stopPulse(getContext());
                 } else {
