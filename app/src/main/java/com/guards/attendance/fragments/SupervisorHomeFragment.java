@@ -191,6 +191,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKIN);
                                         }else {
+                                            checkinViews();
                                             AttendanceUtils.checkinSupervisor(getContext());
                                             startLocationUpdates();
                                             mSimpleDialog.dismiss();
@@ -229,6 +230,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKOUT);
                                         }else {
+                                            checkoutViews();
                                             AttendanceUtils.checkoutSupervisor(getContext());
                                             startLocationUpdates();
                                             mSimpleDialog.dismiss();
@@ -284,9 +286,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
 
         }
     }
-
-    @Override
-    public void onCheckinSuccess() {
+    public void checkinViews(){
         mHolder.inputLayoutComment.setEnabled(true);
         mHolder.commentEditText.setEnabled(true);
         mHolder.inputLayoutComment.setHintEnabled(true);
@@ -295,14 +295,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         mHolder.checkoutCard.setEnabled(true);
         mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
     }
-
-    @Override
-    public void onCheckinFailure() {
-        AttendanceUtils.checkoutSupervisor(getContext());
-    }
-
-    @Override
-    public void onCheckoutSuccess() {
+    public void checkoutViews(){
         mHolder.inputLayoutComment.setEnabled(false);
         mHolder.commentEditText.setEnabled(false);
         mHolder.inputLayoutComment.setHintEnabled(false);
@@ -313,8 +306,25 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     }
 
     @Override
+    public void onCheckinSuccess() {
+        checkinViews();
+    }
+
+    @Override
+    public void onCheckinFailure() {
+        AttendanceUtils.checkoutSupervisor(getContext());
+        checkoutViews();
+    }
+
+    @Override
+    public void onCheckoutSuccess() {
+        checkoutViews();
+    }
+
+    @Override
     public void onCheckoutFailure() {
         AttendanceUtils.checkinSupervisor(getContext());
+        checkinViews();
     }
 
     public static class ViewHolder {
@@ -351,6 +361,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKIN);
                     }else {
+                        checkinViews();
                         AttendanceUtils.checkinSupervisor(getContext());
                         startLocationUpdates();
                     }
@@ -371,6 +382,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKOUT);
                     }else {
+                        checkoutViews();
                         AttendanceUtils.checkoutSupervisor(getContext());
                         startLocationUpdates();
                     }
@@ -385,6 +397,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkinViews();
                     AttendanceUtils.checkinSupervisor(getContext());
                     startLocationUpdates();
                 } else {
@@ -398,6 +411,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    checkoutViews();
                     AttendanceUtils.checkoutSupervisor(getContext());
                     startLocationUpdates();
                 } else {
