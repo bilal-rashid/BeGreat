@@ -11,12 +11,6 @@ import com.guards.attendance.models.User;
  */
 
 public class LoginUtils {
-    public static String getCheckinKey(){
-        return Constants.CHECKIN+AppUtils.getDate();
-    }
-    public static String getCheckoutKey(){
-        return Constants.CHECKOUT+AppUtils.getDate();
-    }
     public static boolean isAdminUserLogin(Context context) {
         return PrefUtils.getBoolean(context, Constants.USER_ADMIN_lOGIN, false);
     }
@@ -47,8 +41,6 @@ public class LoginUtils {
         PrefUtils.persistBoolean(context,Constants.USER_ADMIN_lOGIN,false);
         PrefUtils.persistBoolean(context,Constants.USER_GUARD_LOGIN,false);
         PrefUtils.persistBoolean(context,Constants.USER_SUPERVISOR_LOGIN,false);
-        PrefUtils.persistBoolean(context,getCheckinKey(),false);
-        PrefUtils.persistBoolean(context,getCheckoutKey(),false);
         PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,false);
     }
     public static boolean authenticateGuard(Context context, String username, String password){

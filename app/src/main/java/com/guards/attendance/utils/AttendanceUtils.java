@@ -12,23 +12,23 @@ import com.guards.attendance.toolbox.SmsListener;
  */
 
 public class AttendanceUtils {
-    public static String getCheckinKey(){
-        return Constants.CHECKIN+AppUtils.getDate();
+    public static String getCheckinKey(Context context){
+        return LoginUtils.getUser(context).employee_code+LoginUtils.getUser(context).username+Constants.CHECKIN+AppUtils.getDate();
     }
-    public static String getCheckoutKey(){
-        return Constants.CHECKOUT+AppUtils.getDate();
+    public static String getCheckoutKey(Context context){
+        return LoginUtils.getUser(context).employee_code+LoginUtils.getUser(context).username+Constants.CHECKOUT+AppUtils.getDate();
     }
     public static void checkinGuard(Context context){
-        PrefUtils.persistBoolean(context,getCheckinKey(),true);
+        PrefUtils.persistBoolean(context,getCheckinKey(context),true);
     }
     public static boolean isGuardCheckin(Context context){
-        return  PrefUtils.getBoolean(context,getCheckinKey(),false);
+        return  PrefUtils.getBoolean(context,getCheckinKey(context),false);
     }
     public static void checkoutGuard(Context context){
-        PrefUtils.persistBoolean(context,getCheckoutKey(),true);
+        PrefUtils.persistBoolean(context,getCheckoutKey(context),true);
     }
     public static boolean isGuardCheckout(Context context){
-        return  PrefUtils.getBoolean(context,getCheckoutKey(),false);
+        return  PrefUtils.getBoolean(context,getCheckoutKey(context),false);
     }
     public static void sendCheckin(Context context,SmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
