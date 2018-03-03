@@ -11,6 +11,7 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.fragments.AlarmFragment;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
+import com.guards.attendance.utils.LoginUtils;
 
 import static android.content.Context.POWER_SERVICE;
 
@@ -22,10 +23,14 @@ public class PulseReciever extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d("TAAAG","recieved");
-        PowerManager.WakeLock screenLock = ((PowerManager)context.getSystemService(POWER_SERVICE)).newWakeLock(
-                PowerManager.SCREEN_BRIGHT_WAKE_LOCK| PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-        screenLock.acquire(5000);
-        AppUtils.vibrate(context);
-        ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(),null,false);
+        if(LoginUtils.isGuardUserLogin(context)) {
+            PowerManager.WakeLock screenLock = ((PowerManager) context.getSystemService(POWER_SERVICE)).newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+            screenLock.acquire(5000);
+            AppUtils.vibrate(context);
+            ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(), null, false);
+        }else {
+            AppUtils.stopPulse(context);
+        }
     }
 }
