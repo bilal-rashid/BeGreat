@@ -17,12 +17,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
 import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -30,7 +28,7 @@ import android.widget.Toast;
 
 import com.guards.attendance.R;
 import com.guards.attendance.recievers.PulseReciever;
-import com.guards.attendance.toolbox.SupervisorSmsListener;
+import com.guards.attendance.toolbox.SmsListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -231,7 +229,7 @@ public class AppUtils {
     public static void cancelCheckoutGuard(Context context){
         PrefUtils.persistBoolean(context,getCheckoutKey(),false);
     }
-    public static void sendSupervisorCheckin(String phoneNo, String msg, final Context context, final SupervisorSmsListener listener) {
+    public static void sendSupervisorCheckin(String phoneNo, String msg, final Context context, final SmsListener listener) {
         msg = msg.replace(",\"packetId\":0","").replace("\"packetId\":0,","");
         try {
             String SENT = "SMS_SENT";
@@ -282,7 +280,7 @@ public class AppUtils {
             ex.printStackTrace();
         }
     }
-    public static void sendSupervisorCheckout(String phoneNo, String msg, final Context context, final SupervisorSmsListener listener) {
+    public static void sendSupervisorCheckout(String phoneNo, String msg, final Context context, final SmsListener listener) {
         msg = msg.replace(",\"packetId\":0","").replace("\"packetId\":0,","");
         try {
             String SENT = "SMS_SENT";

@@ -38,7 +38,7 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.User;
-import com.guards.attendance.toolbox.SupervisorSmsListener;
+import com.guards.attendance.toolbox.SmsListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
@@ -49,7 +49,7 @@ import com.guards.attendance.utils.LoginUtils;
  * Created by Bilal Rashid on 2/24/2018.
  */
 
-public class SupervisorHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener,SupervisorSmsListener {
+public class SupervisorHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener,SmsListener {
     private ViewHolder mHolder;
     private User mUser;
     private SimpleDialog mSimpleDialog;
