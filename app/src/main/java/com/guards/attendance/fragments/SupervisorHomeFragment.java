@@ -431,12 +431,12 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         counter = 0;
         String msg;
         if (mHolder.commentEditText.getText().toString().length() > 0) {
-            msg = mHolder.commentEditText.getText().toString() + "-" +
-                    Double.toString(location.getLatitude()) + "-" +
+            msg = mHolder.commentEditText.getText().toString() + "_" +
+                    Double.toString(location.getLatitude()) + "_" +
                     Double.toString(location.getLongitude());
         } else {
-            msg = "n/a" + "-" +
-                    Double.toString(location.getLatitude()) + "-" +
+            msg = "n/a" + "_" +
+                    Double.toString(location.getLatitude()) + "_" +
                     Double.toString(location.getLongitude());
         }
         Log.d("TAAAG", "" + msg);

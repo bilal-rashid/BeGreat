@@ -28,7 +28,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         manipulateBundle();
         try {
-            String[] separated = mPacket.getPoint().split("-");
+            String[] separated = mPacket.getPoint().split("_");
             title = separated[0];
             latitude = Double.parseDouble(separated[1]);
             longitude = Double.parseDouble(separated[2]);
