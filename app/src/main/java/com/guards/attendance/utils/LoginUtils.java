@@ -17,6 +17,9 @@ public class LoginUtils {
     public static boolean isGuardUserLogin(Context context) {
         return PrefUtils.getBoolean(context, Constants.USER_GUARD_LOGIN, false);
     }
+    public static boolean isSupervisorUserLogin(Context context) {
+        return PrefUtils.getBoolean(context, Constants.USER_SUPERVISOR_LOGIN, false);
+    }
     public static void saveUser(Context context, User user) {
         if (user == null)
             return;
@@ -31,9 +34,14 @@ public class LoginUtils {
     public static void loginGuard(Context context){
         PrefUtils.persistBoolean(context,Constants.USER_GUARD_LOGIN,true);
     }
+    public static void loginSupervisor(Context context){
+        PrefUtils.persistBoolean(context,Constants.USER_SUPERVISOR_LOGIN,true);
+    }
     public static void logout(Context context){
         PrefUtils.persistBoolean(context,Constants.USER_ADMIN_lOGIN,false);
         PrefUtils.persistBoolean(context,Constants.USER_GUARD_LOGIN,false);
+        PrefUtils.persistBoolean(context,Constants.USER_SUPERVISOR_LOGIN,false);
+        PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,false);
     }
     public static boolean authenticateGuard(Context context, String username, String password){
         User user = getUser(context);
@@ -54,5 +62,17 @@ public class LoginUtils {
             return true;
         }
         return false;
+    }
+    public static boolean authenticateSupervisor(Context context, String username, String password){
+        User user = getUser(context);
+        if (user != null){
+            if(user.password.equals(password) && user.username.equals(username) && user.is_supervisor){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
     }
 }

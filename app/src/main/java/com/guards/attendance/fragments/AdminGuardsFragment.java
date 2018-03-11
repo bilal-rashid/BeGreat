@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,13 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.GuardAdapter;
 import com.guards.attendance.api.ApiClient;
 import com.guards.attendance.api.ApiInterface;
+import com.guards.attendance.database.AppDataBase;
+import com.guards.attendance.database.DatabaseUtils;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
@@ -48,7 +48,7 @@ import retrofit2.Response;
  * Created by Bilal Rashid on 1/20/2018.
  */
 
-public class AdminHomeFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
+public class AdminGuardsFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
 
     private ViewHolder mHolder;
     private List<Guard> mGuardList;
@@ -66,6 +66,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
 
         }
     };
+    AppDataBase database;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,14 +77,11 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ToolbarListener) {
-            ((ToolbarListener) context).setTitleAdmin("Admin", true);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_admin, container, false);
+        return inflater.inflate(R.layout.fragment_guard_admin, container, false);
     }
 
     @Override
@@ -92,6 +90,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
         mHolder = new ViewHolder(view);
         mHolder.progressBar.setVisibility(View.GONE);
         mHandler = new Handler();
+        database = AppDataBase.getAppDatabase(getContext());
         getMessagesAndPopulateList();
 
     }
@@ -117,7 +116,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
                     MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE);
             return;
         }
-        mGuardList = SmsUtils.getAllGuards(getContext());
+        mGuardList = DatabaseUtils.with(database).getGuards();
         if (mGuardList.size() > 0) {
             setupRecyclerView();
             populateData(mGuardList);
@@ -209,7 +208,7 @@ public class AdminHomeFragment extends Fragment implements View.OnClickListener,
     private void Syncdata() {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        List<Packet> list = SmsUtils.getAllPackets(getContext(), true);
+        List<Packet> list = DatabaseUtils.with(database).getLastWeekPackets();
         if (list.size() > 0) {
             Call<ResponseModel> call = apiService.TEST(list);
             call.enqueue(new Callback<ResponseModel>() {

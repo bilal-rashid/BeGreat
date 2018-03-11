@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.toolbox.OnItemClickListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,9 +28,11 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
 
     private List<Packet> mItems = new ArrayList<>();
     SimpleDateFormat format;
+    OnItemClickListener mItemclickListener;
 
-    public PacketsAdapter() {
-        format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public PacketsAdapter(OnItemClickListener onItemClickListener) {
+        format = new SimpleDateFormat("dd/MM/yy HH:mm");
+        this.mItemclickListener = onItemClickListener;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder,final int position) {
         Date date;
         try {
             date = format.parse(mItems.get(position).date_time);
@@ -53,20 +56,44 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        holder.status_text.setText(mItems.get(position).status);
-        if(mItems.get(position).status.equals(StatusEnum.CHECKIN.getName())){
+        holder.status_text.setText(getNameOfStatus(mItems.get(position).status));
+        if(mItems.get(position).status.equals(StatusEnum.CHECKIN.getValue())){
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_checkin));
 
-        }else if (mItems.get(position).status.equals(StatusEnum.CHECKOUT.getName())){
+        }else if (mItems.get(position).status.equals(StatusEnum.CHECKOUT.getValue())){
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_checkout));
-        }else if (mItems.get(position).status.equals(StatusEnum.RESPONSE.getName())){
+        }else if (mItems.get(position).status.equals(StatusEnum.RESPONSE.getValue())){
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_responded));
-        }else if (mItems.get(position).status.equals(StatusEnum.NO_RESPONSE.getName())){
+        }else if (mItems.get(position).status.equals(StatusEnum.NO_RESPONSE.getValue())){
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_not_responded));
         }else {
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_emergency));
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemclickListener.onItemClick(view,mItems.get(position),position);
+            }
+        });
 
+    }
+
+    private String getNameOfStatus(String status) {
+        if(status.equals(StatusEnum.CHECKIN.getValue())){
+            return StatusEnum.CHECKIN.getName();
+        }
+        else if(status.equals(StatusEnum.CHECKOUT.getValue())){
+            return StatusEnum.CHECKOUT.getName();
+        }
+        else if(status.equals(StatusEnum.EMERGENCY.getValue())){
+            return StatusEnum.EMERGENCY.getName();
+        }
+        else if(status.equals(StatusEnum.RESPONSE.getValue())){
+            return StatusEnum.RESPONSE.getName();
+        }
+        else {
+            return StatusEnum.NO_RESPONSE.getName();
+        }
     }
 
     @Override

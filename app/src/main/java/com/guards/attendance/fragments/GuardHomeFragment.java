@@ -23,6 +23,7 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.User;
+import com.guards.attendance.toolbox.SmsListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
@@ -33,7 +34,7 @@ import com.guards.attendance.utils.LoginUtils;
  * Created by Bilal Rashid on 1/20/2018.
  */
 
-public class GuardHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
+public class GuardHomeFragment extends Fragment implements View.OnClickListener, View.OnTouchListener,SmsListener {
     private ViewHolder mHolder;
     private User mUser;
     private SimpleDialog mSimpleDialog;
@@ -152,11 +153,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                             new String[]{Manifest.permission.SEND_SMS},
                                             MY_SMS_REQ_CODE_CHECKIN);
                                 }else {
-                                    mHolder.checkinCard.setEnabled(false);
-                                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                    AttendanceUtils.checkinGuard(getContext());
-                                    AttendanceUtils.sendCheckin(getContext());
-                                    AppUtils.startPulse(getContext());
+                                    checkinViews();
+                                    AttendanceUtils.sendCheckin(getContext(),GuardHomeFragment.this);
                                     mSimpleDialog.dismiss();
                                 }
                                 break;
@@ -181,10 +179,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                             new String[]{Manifest.permission.SEND_SMS},
                                             MY_SMS_REQ_CODE_CHECKOUT);
                                 }else {
-                                    mHolder.checkoutCard.setEnabled(false);
-                                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                                    AttendanceUtils.checkoutGuard(getContext());
-                                    AttendanceUtils.sendCheckout(getContext());
+                                    checkoutViews();
+                                    AttendanceUtils.sendCheckout(getContext(),GuardHomeFragment.this);
                                     AppUtils.stopPulse(getContext());
                                     mSimpleDialog.dismiss();
                                 }
@@ -240,6 +236,45 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
 
         }
     }
+    public void checkinViews(){
+        mHolder.checkinCard.setEnabled(false);
+        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+    }
+    public void checkinFailedViews(){
+        mHolder.checkinCard.setEnabled(true);
+        mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkin_color));
+    }
+    public void checkoutViews(){
+        mHolder.checkoutCard.setEnabled(false);
+        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
+    }
+    public void checkoutFailedViews(){
+        mHolder.checkoutCard.setEnabled(true);
+        mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_checkout_color));
+    }
+
+    @Override
+    public void onCheckinSuccess() {
+        checkinViews();
+        AttendanceUtils.checkinGuard(getContext());
+        AppUtils.startPulse(getContext());
+    }
+
+    @Override
+    public void onCheckinFailure() {
+        checkinFailedViews();
+    }
+
+    @Override
+    public void onCheckoutSuccess() {
+        checkoutViews();
+        AttendanceUtils.checkoutGuard(getContext());
+    }
+
+    @Override
+    public void onCheckoutFailure() {
+        checkoutFailedViews();
+    }
 
     public static class ViewHolder {
         ImageView profileImage;
@@ -264,11 +299,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.checkinCard.setEnabled(false);
-                    mHolder.checkinCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                    AttendanceUtils.checkinGuard(getContext());
-                    AttendanceUtils.sendCheckin(getContext());
-                    AppUtils.startPulse(getContext());
+                    checkinViews();
+                    AttendanceUtils.sendCheckin(getContext(),this);
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
@@ -280,10 +312,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.checkoutCard.setEnabled(false);
-                    mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
-                    AttendanceUtils.checkoutGuard(getContext());
-                    AttendanceUtils.sendCheckout(getContext());
+                    checkoutViews();
+                    AttendanceUtils.sendCheckout(getContext(),this);
                     AppUtils.stopPulse(getContext());
                 } else {
                     // permission denied, boo! Disable the

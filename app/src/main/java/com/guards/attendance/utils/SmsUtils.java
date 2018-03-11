@@ -37,7 +37,7 @@ public class SmsUtils {
                 do {
                     String strAddress = cur.getString(index_Address);
                     String strbody = cur.getString(index_Body);
-                    if (strbody.contains("\"" + Constants.UNIQUE_ID + "\"")) {
+                    if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                         hashMap.put(strAddress, GsonUtils.fromJson(strbody, Packet.class).emp_id);
                     }
                 } while (cur.moveToNext());
@@ -74,7 +74,7 @@ public class SmsUtils {
                 do {
                     String strAddress = cur.getString(index_Address);
                     String strbody = cur.getString(index_Body);
-                    if (strbody.contains("\"" + Constants.UNIQUE_ID + "\"")) {
+                    if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                         packets.add(GsonUtils.fromJson(strbody, Packet.class));
                     }
                 } while (cur.moveToNext());
@@ -105,10 +105,10 @@ public class SmsUtils {
                 do {
                     String strAddress = cur.getString(index_Address);
                     String strbody = cur.getString(index_Body);
-                    if (strbody.contains("\"" + Constants.UNIQUE_ID + "\"")) {
+                    if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                         Packet temp_packet = GsonUtils.fromJson(strbody, Packet.class);
                         Date lastweek = new Date(Calendar.getInstance().getTime().getTime() - (7L * 24L * 60L * 60L * 1000L));
-                        Date packetDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(temp_packet.date_time);
+                        Date packetDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(temp_packet.date_time);
                         if(lastweek.compareTo(packetDate)<1){
                             packets.add(GsonUtils.fromJson(strbody, Packet.class));
                         }
@@ -137,6 +137,37 @@ public class SmsUtils {
                 packetList.addAll(getLastWeekGuardPackets(context,guardList.get(i).number));
             else
                 packetList.addAll(getGuardPackets(context,guardList.get(i).number));
+        }
+        return packetList;
+    }
+    public static List<Packet> getAllPackets(Context context) {
+        List<Packet> packetList = new ArrayList<>();
+        final String SMS_URI_INBOX = "content://sms/inbox";
+        final String SMS_URI_ALL = "content://sms/";
+        try {
+            Uri uri = Uri.parse(SMS_URI_INBOX);
+            String[] projection = new String[]{"address", "body", "date"};
+            Cursor cur = context.getContentResolver().query(uri, projection, null, null, "date desc");
+            if (cur.moveToFirst()) {
+                int index_Address = cur.getColumnIndex("address");
+                int index_Body = cur.getColumnIndex("body");
+                do {
+                    String strAddress = cur.getString(index_Address);
+                    String strbody = cur.getString(index_Body);
+                    if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"") || strbody.contains("\"" + Constants.UNIQUE_ID_SUPERVISOR + "\"")) {
+                        packetList.add(GsonUtils.fromJson(strbody, Packet.class).setNumber(strAddress));
+                    }
+                } while (cur.moveToNext());
+
+                if (!cur.isClosed()) {
+                    cur.close();
+                    cur = null;
+                }
+            } else {
+            } // end if
+
+        } catch (SQLiteException ex) {
+            Log.d("SQLiteException", ex.getMessage());
         }
         return packetList;
     }
