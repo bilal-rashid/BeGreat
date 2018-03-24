@@ -12,6 +12,7 @@ import com.guards.attendance.FrameActivity;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.fragments.EmergencyFragment;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.toolbox.ObservableObject;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.Constants;
@@ -32,6 +33,12 @@ public class MessageReciever extends BroadcastReceiver {
             // Retrieve the SMS Messages received
             Object[] pdus = (Object[]) bundle.get("pdus");
             String message = SmsMessage.createFromPdu((byte[]) pdus[0]).getMessageBody();
+            if(LoginUtils.isAdminUserLogin(context)){
+                if (message.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"") ||
+                        message.contains("\"" + Constants.UNIQUE_ID_SUPERVISOR + "\"")) {
+                    ObservableObject.getInstance().updateValue(intent);
+                }
+            }
             if (message.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                 Packet packet = GsonUtils.fromJson(message, Packet.class);
                 if (packet.status.equals(StatusEnum.EMERGENCY.getValue())) {

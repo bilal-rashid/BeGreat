@@ -29,6 +29,7 @@ import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.models.ResponseModel;
+import com.guards.attendance.toolbox.ObservableObject;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
@@ -39,6 +40,8 @@ import com.guards.attendance.utils.LoginUtils;
 import com.guards.attendance.utils.SmsUtils;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,7 +51,7 @@ import retrofit2.Response;
  * Created by Bilal Rashid on 1/20/2018.
  */
 
-public class AdminGuardsFragment extends Fragment implements View.OnClickListener, OnItemClickListener {
+public class AdminGuardsFragment extends Fragment implements View.OnClickListener, OnItemClickListener,Observer {
 
     private ViewHolder mHolder;
     private List<Guard> mGuardList;
@@ -91,7 +94,6 @@ public class AdminGuardsFragment extends Fragment implements View.OnClickListene
         mHolder.progressBar.setVisibility(View.GONE);
         mHandler = new Handler();
         database = AppDataBase.getAppDatabase(getContext());
-        getMessagesAndPopulateList();
 
     }
 
@@ -141,6 +143,18 @@ public class AdminGuardsFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
 
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        ObservableObject.getInstance().deleteObserver(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMessagesAndPopulateList();
+        ObservableObject.getInstance().addObserver(this);
+    }
 
     @Override
     public void onItemClick(View view, Object data, int position) {
@@ -148,6 +162,18 @@ public class AdminGuardsFragment extends Fragment implements View.OnClickListene
         Bundle bundle = new Bundle();
         bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(guard));
         ActivityUtils.startActivity(getActivity(), FrameActivity.class, GuardDetailsFragment.class.getName(), bundle);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_SMS},
+                    45);
+        } else {
+            DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
+        }
+        getMessagesAndPopulateList();
     }
 
     public static class ViewHolder {

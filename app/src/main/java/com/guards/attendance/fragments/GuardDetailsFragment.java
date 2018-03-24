@@ -1,7 +1,10 @@
 package com.guards.attendance.fragments;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,20 +19,24 @@ import com.guards.attendance.database.AppDataBase;
 import com.guards.attendance.database.DatabaseUtils;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.toolbox.ObservableObject;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.Constants;
 import com.guards.attendance.utils.GsonUtils;
+import com.guards.attendance.utils.SmsUtils;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Bilal Rashid on 1/28/2018.
  */
 
-public class GuardDetailsFragment extends Fragment implements OnItemClickListener{
+public class GuardDetailsFragment extends Fragment implements OnItemClickListener,Observer {
 
     private ViewHolder mHolder;
     private Guard mGuard;
@@ -57,6 +64,11 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
         mHolder = new ViewHolder(view);
         manipulateBundle();
         database = AppDataBase.getAppDatabase(getContext());
+        mHolder.emp_id_text.setText(mGuard.emp_id);
+
+
+    }
+    public void getMessagesAndPopulateList() {
         mPacketList = DatabaseUtils.with(database).getPacketsOfEmployee(mGuard.emp_id);
         Collections.sort(mPacketList, new Comparator<Packet>() {
             @Override
@@ -64,15 +76,25 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
                 return t1.compare(packet);
             }
         });
-        mHolder.emp_id_text.setText(mGuard.emp_id);
         if(mPacketList.size() > 0){
             setupRecyclerView();
             populateData(mPacketList);
         }else {
         }
-
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        ObservableObject.getInstance().deleteObserver(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getMessagesAndPopulateList();
+        ObservableObject.getInstance().addObserver(this);
+    }
     private void manipulateBundle() {
         if (getArguments() != null) {
             mGuard = GsonUtils.fromJson(getArguments().getString(Constants.GUARD_DATA),Guard.class);
@@ -91,6 +113,18 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
     @Override
     public void onItemClick(View view, Object data, int position) {
 
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_SMS},
+                    45);
+        } else {
+            DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
+        }
+        getMessagesAndPopulateList();
     }
 
     public static class ViewHolder {
