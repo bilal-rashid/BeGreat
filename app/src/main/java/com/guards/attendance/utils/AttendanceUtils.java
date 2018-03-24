@@ -78,4 +78,34 @@ public class AttendanceUtils {
                 GsonUtils.toJson(packet).replace(",\"packetId\":0","").replace("\"packetId\":0,",""),
                 context,listener);
     }
+    public static void sendLocation(Context context,String location){
+        if(LoginUtils.isGuardUserLogin(context)){
+            Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
+                    StatusEnum.LOCATION.getValue(),AppUtils.getDateAndTime(),location,false);
+            String text = GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                    "").replace("\"packetId\":0,","");
+            AppUtils.sendSMS(context.getString(R.string.admin_number), text);
+        }else if(LoginUtils.isSupervisorUserLogin(context)){
+            Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
+                    StatusEnum.LOCATION.getValue(),AppUtils.getDateAndTime(),location,true);
+            String text = GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                    "").replace("\"packetId\":0,","");
+            AppUtils.sendSMS(context.getString(R.string.admin_number), text);
+        }
+    }
+    public static void sendGpsOFF(Context context){
+        if(LoginUtils.isGuardUserLogin(context)){
+            Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
+                    StatusEnum.NO_LOCATION.getValue(),AppUtils.getDateAndTime(),"noGps_13.679407_171.080469",false);
+            String text = GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                    "").replace("\"packetId\":0,","");
+            AppUtils.sendSMS(context.getString(R.string.admin_number), text);
+        }else if(LoginUtils.isSupervisorUserLogin(context)){
+            Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
+                    StatusEnum.NO_LOCATION.getValue(),AppUtils.getDateAndTime(),"noGps_13.679407_171.080469",true);
+            String text = GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                    "").replace("\"packetId\":0,","");
+            AppUtils.sendSMS(context.getString(R.string.admin_number), text);
+        }
+    }
 }
