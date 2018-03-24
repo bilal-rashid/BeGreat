@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -153,6 +154,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                             new String[]{Manifest.permission.SEND_SMS},
                                             MY_SMS_REQ_CODE_CHECKIN);
                                 }else {
+                                    mHolder.progressBar.setVisibility(View.VISIBLE);
                                     checkinViews();
                                     AttendanceUtils.sendCheckin(getContext(),GuardHomeFragment.this);
                                     mSimpleDialog.dismiss();
@@ -179,6 +181,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                             new String[]{Manifest.permission.SEND_SMS},
                                             MY_SMS_REQ_CODE_CHECKOUT);
                                 }else {
+                                    mHolder.progressBar.setVisibility(View.VISIBLE);
                                     checkoutViews();
                                     AttendanceUtils.sendCheckout(getContext(),GuardHomeFragment.this);
                                     AppUtils.stopPulse(getContext());
@@ -258,28 +261,35 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         checkinViews();
         AttendanceUtils.checkinGuard(getContext());
         AppUtils.startPulse(getContext());
+        mHolder.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onCheckinFailure() {
         checkinFailedViews();
+        mHolder.progressBar.setVisibility(View.GONE);
+        AppUtils.showSnackBar(getView(),"Checkin Failed! Please recharge credit");
     }
 
     @Override
     public void onCheckoutSuccess() {
         checkoutViews();
         AttendanceUtils.checkoutGuard(getContext());
+        mHolder.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onCheckoutFailure() {
         checkoutFailedViews();
+        mHolder.progressBar.setVisibility(View.GONE);
+        AppUtils.showSnackBar(getView(),"Checkout Failed! Please recharge credit");
     }
 
     public static class ViewHolder {
         ImageView profileImage;
         TextView usernameText, empCodeText;
         CardView alarmCard, checkinCard, checkoutCard,logoutCard;
+        ProgressBar progressBar;
         public ViewHolder(View view) {
             profileImage = (ImageView) view.findViewById(R.id.image_profile);
             usernameText = (TextView) view.findViewById(R.id.text_user_name);
@@ -289,6 +299,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
             checkinCard = (CardView) view.findViewById(R.id.card_checkin);
             checkoutCard = (CardView) view.findViewById(R.id.card_checkout);
             logoutCard = (CardView) view.findViewById(R.id.card_logout);
+
+            progressBar = (ProgressBar)view.findViewById(R.id.progress_message);
         }
 
     }
@@ -300,6 +312,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     checkinViews();
+                    mHolder.progressBar.setVisibility(View.VISIBLE);
                     AttendanceUtils.sendCheckin(getContext(),this);
                 } else {
                     // permission denied, boo! Disable the
@@ -313,6 +326,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     checkoutViews();
+                    mHolder.progressBar.setVisibility(View.VISIBLE);
                     AttendanceUtils.sendCheckout(getContext(),this);
                     AppUtils.stopPulse(getContext());
                 } else {

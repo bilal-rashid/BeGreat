@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationCallback;
@@ -191,6 +192,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKIN);
                                         }else {
+                                            mHolder.progressBar.setVisibility(View.VISIBLE);
                                             checkinViews();
                                             AttendanceUtils.checkinSupervisor(getContext());
                                             startLocationUpdates();
@@ -230,6 +232,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKOUT);
                                         }else {
+                                            mHolder.progressBar.setVisibility(View.VISIBLE);
                                             checkoutViews();
                                             AttendanceUtils.checkoutSupervisor(getContext());
                                             startLocationUpdates();
@@ -308,16 +311,20 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     @Override
     public void onCheckinSuccess() {
         checkinViews();
+        mHolder.progressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onCheckinFailure() {
         AttendanceUtils.checkoutSupervisor(getContext());
         checkoutViews();
+        mHolder.progressBar.setVisibility(View.GONE);
+        AppUtils.showSnackBar(getView(),"Checkin Failed! Please recharge credit");
     }
 
     @Override
     public void onCheckoutSuccess() {
+        mHolder.progressBar.setVisibility(View.GONE);
         checkoutViews();
     }
 
@@ -325,6 +332,8 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     public void onCheckoutFailure() {
         AttendanceUtils.checkinSupervisor(getContext());
         checkinViews();
+        mHolder.progressBar.setVisibility(View.GONE);
+        AppUtils.showSnackBar(getView(),"Checkout Failed! Please recharge credit");
     }
 
     public static class ViewHolder {
@@ -333,6 +342,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         CardView checkinCard, checkoutCard, logoutCard;
         TextInputEditText commentEditText;
         TextInputLayout inputLayoutComment;
+        ProgressBar progressBar;
 
         public ViewHolder(View view) {
             profileImage = (ImageView) view.findViewById(R.id.image_profile);
@@ -344,6 +354,8 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
             logoutCard = (CardView) view.findViewById(R.id.card_logout);
             commentEditText = (TextInputEditText) view.findViewById(R.id.edit_text_comment);
             inputLayoutComment = (TextInputLayout) view.findViewById(R.id.input_layout_comment);
+
+            progressBar = (ProgressBar) view.findViewById(R.id.progress_message);
         }
 
     }
@@ -361,6 +373,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKIN);
                     }else {
+                        mHolder.progressBar.setVisibility(View.VISIBLE);
                         checkinViews();
                         AttendanceUtils.checkinSupervisor(getContext());
                         startLocationUpdates();
@@ -382,6 +395,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKOUT);
                     }else {
+                        mHolder.progressBar.setVisibility(View.VISIBLE);
                         checkoutViews();
                         AttendanceUtils.checkoutSupervisor(getContext());
                         startLocationUpdates();
