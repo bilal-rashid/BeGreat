@@ -60,6 +60,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
                     final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         AttendanceUtils.sendNotResponded(getContext(),"noGps_13.679407_171.080469");
+                        getActivity().finish();
                     } else {
                         startLocationUpdates(false);
                     }
@@ -109,6 +110,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
         final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AttendanceUtils.sendResponded(getContext(),"noGps_13.679407_171.080469");
+            getActivity().finish();
         } else {
             startLocationUpdates(true);
         }
