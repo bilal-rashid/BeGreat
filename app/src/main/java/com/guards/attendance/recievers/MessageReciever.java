@@ -124,7 +124,7 @@ public class MessageReciever extends BroadcastReceiver {
     public void onLocationChanged(Location location) {
         // New location has now been determined
         counter = 0;
-        String loc = "n/a" + "_" +Double.toString(location.getLatitude()) + "_" +
+        String loc = "location" + "_" +Double.toString(location.getLatitude()) + "_" +
                 Double.toString(location.getLongitude());
         AttendanceUtils.sendLocation(context,loc);
     }

@@ -30,20 +30,23 @@ public class AttendanceUtils {
     public static boolean isGuardCheckout(Context context){
         return  PrefUtils.getBoolean(context,getCheckoutKey(context),false);
     }
-    public static void sendCheckin(Context context,SmsListener listener){
+    public static void sendCheckin(Context context,SmsListener listener,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
-                StatusEnum.CHECKIN.getValue(),AppUtils.getDateAndTime());
-        AppUtils.sendCheckin(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
+                StatusEnum.CHECKIN.getValue(),AppUtils.getDateAndTime(),location,false);
+        AppUtils.sendCheckin(context.getString(R.string.admin_number), GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                "").replace("\"packetId\":0,",""),context,listener);
     }
-    public static void sendCheckout(Context context,SmsListener listener){
+    public static void sendCheckout(Context context,SmsListener listener,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
-                StatusEnum.CHECKOUT.getValue(),AppUtils.getDateAndTime());
-        AppUtils.sendCheckout(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context,listener);
+                StatusEnum.CHECKOUT.getValue(),AppUtils.getDateAndTime(),location,false);
+        AppUtils.sendCheckout(context.getString(R.string.admin_number), GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                "").replace("\"packetId\":0,",""),context,listener);
     }
-    public static void sendEmergency(Context context){
+    public static void sendEmergency(Context context,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
-                StatusEnum.EMERGENCY.getValue(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
+                StatusEnum.EMERGENCY.getValue(),AppUtils.getDateAndTime(),location,false);
+        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                "").replace("\"packetId\":0,",""),context);
     }
     public static void sendResponded(Context context,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
