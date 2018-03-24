@@ -45,15 +45,19 @@ public class AttendanceUtils {
                 StatusEnum.EMERGENCY.getValue(),AppUtils.getDateAndTime());
         AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
     }
-    public static void sendResponded(Context context){
+    public static void sendResponded(Context context,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
-                StatusEnum.RESPONSE.getValue(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
+                StatusEnum.RESPONSE.getValue(),AppUtils.getDateAndTime(),location,false);
+        String text = GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                "").replace("\"packetId\":0,","");
+        AppUtils.sendSMS(context.getString(R.string.admin_number), text);
     }
-    public static void sendNotResponded(Context context){
+    public static void sendNotResponded(Context context,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
-                StatusEnum.NO_RESPONSE.getValue(),AppUtils.getDateAndTime());
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet),context);
+                StatusEnum.NO_RESPONSE.getValue(),AppUtils.getDateAndTime(),location,false);
+        String text = GsonUtils.toJson(packet).replace(",\"packetId\":0",
+                "").replace("\"packetId\":0,","");
+        AppUtils.sendSMS(context.getString(R.string.admin_number), text);
     }
     public static void checkinSupervisor(Context context){
         PrefUtils.persistBoolean(context,Constants.SUPERVISOR_CHECKIN,true);
