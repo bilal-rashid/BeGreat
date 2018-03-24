@@ -151,6 +151,13 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_SMS},
+                    45);
+        } else {
+            DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
+        }
         getMessagesAndPopulateList();
         ObservableObject.getInstance().addObserver(this);
     }
