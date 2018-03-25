@@ -38,4 +38,7 @@ public interface PacketDao {
 
     @Query("Select * FROM packet WHERE u_id == :identifier")
     List<Packet> loadAllEmployees(String identifier);
+
+    @Query("Select * FROM packet WHERE packetId >:id AND status NOT IN(:value,:value1)")
+    List<Packet> getPacketsToSync(int id, String value, String value1);
 }

@@ -52,6 +52,7 @@ public class AdminFragment extends Fragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppUtils.putDbID(getContext());
         mHolder = new ViewHolder(view);
         database = AppDataBase.getAppDatabase(getContext());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {

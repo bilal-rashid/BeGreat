@@ -423,4 +423,17 @@ public class AppUtils {
             ex.printStackTrace();
         }
     }
+
+    public static void putDbID(Context context) {
+        long temp = PrefUtils.getLong(context,Constants.DB_ID,1);
+        if(temp == 1){
+            Calendar c = Calendar.getInstance();
+            long id = c.getTime().getTime();
+            PrefUtils.persistLong(context,Constants.DB_ID,id);
+        }
+    }
+    public static long getDbId(Context context){
+        return PrefUtils.getLong(context,Constants.DB_ID,1);
+    }
+
 }

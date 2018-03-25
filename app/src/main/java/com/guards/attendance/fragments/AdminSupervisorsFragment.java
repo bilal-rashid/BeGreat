@@ -57,18 +57,6 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
     private List<Guard> mGuardList;
     private SimpleDialog mSimpleDialog;
     private GuardAdapter mGuardAdapter;
-    private Handler mHandler;
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                mHandler.removeCallbacks(mRunnable);
-                Syncdata();
-            } catch (Exception e) {
-            }
-
-        }
-    };
     AppDataBase database;
 
     @Override
@@ -92,7 +80,6 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
         mHolder.progressBar.setVisibility(View.GONE);
-        mHandler = new Handler();
         database = AppDataBase.getAppDatabase(getContext());
     }
 
@@ -225,45 +212,12 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
                 mSimpleDialog.show();
                 return true;
             case R.id.action_sync:
-                if (AppUtils.isInternetAvailable(getContext())) {
-                    mHolder.progressBar.setVisibility(View.VISIBLE);
-                    mHandler.postDelayed(mRunnable, 100);
-                } else {
-                    AppUtils.makeToast(getContext(), "Internet not Available");
-                }
+                AppUtils.stopPulse(getContext());
+                AppUtils.startAdminPulse(getContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void Syncdata() {
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-        List<Packet> list = DatabaseUtils.with(database).getLastWeekPackets();
-        if (list.size() > 0) {
-            Call<ResponseModel> call = apiService.TEST(list);
-            call.enqueue(new Callback<ResponseModel>() {
-                @Override
-                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                    mHolder.progressBar.setVisibility(View.GONE);
-                    if (response.body().Status) {
-                        AppUtils.showSnackBar(getView(), "Sync Completed Successfully");
-                    } else {
-                        AppUtils.showSnackBar(getView(), "UnSuccessful");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseModel> call, Throwable t) {
-                    mHolder.progressBar.setVisibility(View.GONE);
-                    AppUtils.showSnackBar(getView(), "Some Error Occurred");
-                }
-            });
-        } else {
-            AppUtils.showSnackBar(getView(), "Data not available");
-        }
-
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.guards.attendance.database;
 
+import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.utils.Constants;
@@ -112,5 +113,10 @@ public class DatabaseUtils {
             }
         }
         return guardList;
+    }
+    public List<Packet> getPacketsToSync(int id){
+        List<Packet> result = dataBase.packetDao().getPacketsToSync(id, StatusEnum.LOCATION.getValue(),
+                StatusEnum.NO_LOCATION.getValue());
+        return result;
     }
 }

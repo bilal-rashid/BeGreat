@@ -1,7 +1,9 @@
 package com.guards.attendance.api;
 
 import com.guards.attendance.models.Packet;
+import com.guards.attendance.models.RequestModel;
 import com.guards.attendance.models.ResponseModel;
+import com.guards.attendance.models.WebApiResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +15,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -33,5 +34,12 @@ public interface ApiInterface {
     Call<Object> test(@Field("request") String data);
     @Headers({"Content-type:application/json"})
     @POST("/SaveAttendence")
-    Call<ResponseModel> TEST(@Body List<Packet> args);
+    Call<ResponseModel> TEST(@Body List<Packet> Packets);
+
+    @GET("/api/Attendance")
+    Call<ResponseModel> getLastId(@Query("dbId") long id);
+
+    @Headers({"Content-type:application/json"})
+    @POST("/api/Attendance")
+    Call<WebApiResponse> postPackets(@Body RequestModel data);
 }
