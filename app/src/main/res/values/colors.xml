@@ -193,4 +193,6 @@
     <color name="color_checkout">#ffee58</color>
     <color name="color_checkin">#9fa8da</color>
     <color name="color_emergency">#ff5722</color>
+    <color name="color_location">#26a69a</color>
+    <color name="color_no_gps">#8d6e63</color>
 </resources>

@@ -8,20 +8,25 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.guards.attendance.MapsActivity;
 import com.guards.attendance.R;
 import com.guards.attendance.adapters.PacketsAdapter;
 import com.guards.attendance.database.AppDataBase;
 import com.guards.attendance.database.DatabaseUtils;
+import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.ObservableObject;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
+import com.guards.attendance.utils.ActivityUtils;
+import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.Constants;
 import com.guards.attendance.utils.GsonUtils;
 import com.guards.attendance.utils.SmsUtils;
@@ -119,6 +124,14 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
 
     @Override
     public void onItemClick(View view, Object data, int position) {
+        Packet packet = (Packet) data;
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.PACKET_DATA, GsonUtils.toJson(packet));
+        if(packet.status.equals(StatusEnum.NO_LOCATION.getValue())){
+            AppUtils.showSnackBar(getView(),"Location not provided");
+        }else {
+            ActivityUtils.startActivity(getActivity(), MapsActivity.class,bundle);
+        }
 
     }
 
