@@ -64,7 +64,12 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps">
+
+        </activity>
+        <service
+            android:name=".service.RSSPullService"
+            android:exported="false"/>
     </application>
 
 </manifest>

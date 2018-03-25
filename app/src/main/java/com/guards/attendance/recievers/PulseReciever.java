@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.guards.attendance.FrameActivity;
 import com.guards.attendance.fragments.AlarmFragment;
+import com.guards.attendance.service.RSSPullService;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.LoginUtils;
@@ -30,7 +31,9 @@ public class PulseReciever extends BroadcastReceiver{
             AppUtils.vibrate(context);
             ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(), null, false);
         }else if (LoginUtils.isAdminUserLogin(context)){
-
+            Intent cbIntent =  new Intent();
+            cbIntent.setClass(context, RSSPullService.class);
+            context.startService(cbIntent);
         }else {
             AppUtils.stopPulse(context);
         }
