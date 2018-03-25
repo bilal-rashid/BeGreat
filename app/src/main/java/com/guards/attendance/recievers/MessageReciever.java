@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +45,18 @@ public class MessageReciever extends BroadcastReceiver {
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
+    private Handler mHandler;
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                mHandler.removeCallbacks(mRunnable);
+                ObservableObject.getInstance().updateValue(new Bundle());
+
+            }catch (Exception e){}
+
+        }
+    };
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -55,7 +68,8 @@ public class MessageReciever extends BroadcastReceiver {
             if(LoginUtils.isAdminUserLogin(context)){
                 if (message.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"") ||
                         message.contains("\"" + Constants.UNIQUE_ID_SUPERVISOR + "\"")) {
-                    ObservableObject.getInstance().updateValue(intent);
+                    mHandler = new Handler();
+                    mHandler.postDelayed(mRunnable, 1000);
                 }
             }
             if (message.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
