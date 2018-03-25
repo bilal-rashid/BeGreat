@@ -73,7 +73,7 @@ public class DatabaseUtils {
             Date lastweek = new Date(Calendar.getInstance().getTime().getTime() - (7L * 24L * 60L * 60L * 1000L));
             Date packetDate = null;
             try {
-                packetDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(temp_packet.date_time);
+                packetDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(temp_packet.date_time);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

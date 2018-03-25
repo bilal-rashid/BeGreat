@@ -21,5 +21,6 @@ public class Constants {
     public static final String UNIQUE_ID_SUPERVISOR = "P2-L8S7";
     public static final long INTERVAL = 1000 * 60 * 60;
     public static final String GUARD_DATA = "guard_data";
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
 }

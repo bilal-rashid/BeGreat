@@ -12,6 +12,7 @@ import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.OnItemClickListener;
+import com.guards.attendance.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
     OnItemClickListener mItemclickListener;
 
     public PacketsAdapter(OnItemClickListener onItemClickListener) {
-        format = new SimpleDateFormat("dd/MM/yy HH:mm");
+        format = new SimpleDateFormat(Constants.DATE_FORMAT);
         this.mItemclickListener = onItemClickListener;
     }
 
