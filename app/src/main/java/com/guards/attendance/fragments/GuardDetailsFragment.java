@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -155,6 +158,23 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
         public ViewHolder(View view) {
             guardsRecycler = (RecyclerView) view.findViewById(R.id.recycler_guards);
             emp_id_text = (TextView) view.findViewById(R.id.text_emp_id);
+        }
+    }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.details_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_get_location:
+                AppUtils.sendSMS(mGuard.number,"abcdefghij",getContext());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
