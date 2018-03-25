@@ -217,14 +217,27 @@ public class AppUtils {
         alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.INTERVAL,
                 Constants.INTERVAL, recurringLl24);
     }
-    public static void stopPulse(Context context) {
+    public static void startAdminPulse(Context context) {
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTimeInMillis(System.currentTimeMillis());
         Intent ll24 = new Intent(context, PulseReciever.class);
         PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarms.cancel(recurringLl24);
+        alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.ADMIN_INTERVAL,
+                Constants.ADMIN_INTERVAL, recurringLl24);
+    }
+    public static void stopPulse(Context context) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Intent ll24 = new Intent(context, PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_NO_CREATE);
+        if(recurringLl24 != null) {
+            AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            alarms.cancel(recurringLl24);
+            recurringLl24.cancel();
+        }
     }
     public static void changeProfile(Context context) {
         AudioManager am;

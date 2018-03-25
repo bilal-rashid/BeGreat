@@ -29,6 +29,8 @@ public class PulseReciever extends BroadcastReceiver{
             screenLock.acquire(5000);
             AppUtils.vibrate(context);
             ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(), null, false);
+        }else if (LoginUtils.isAdminUserLogin(context)){
+
         }else {
             AppUtils.stopPulse(context);
         }
