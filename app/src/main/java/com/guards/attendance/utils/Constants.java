@@ -19,10 +19,11 @@ public class Constants {
     public static final String SUPERVISOR_CHECKIN = "supervisor_checkin";
     public static final String UNIQUE_ID_GUARD = "G2-Y6K5";
     public static final String UNIQUE_ID_SUPERVISOR = "P2-L8S7";
-    public static final long INTERVAL = 1000 * 60 * 60;
+    public static final long INTERVAL = 1000 * 60 * 1;
     public static final long ADMIN_INTERVAL = 1000 * 60 * 1;
     public static final String GUARD_DATA = "guard_data";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String DB_ID = "db_id";
+    public static final String GUARD_CHECKIN= "guard_checkin_if";
 
 }

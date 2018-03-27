@@ -282,12 +282,10 @@ public class AppUtils {
 
         calendar.setTimeInMillis(System.currentTimeMillis());
         Intent ll24 = new Intent(context, PulseReciever.class);
-        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_NO_CREATE);
-        if(recurringLl24 != null) {
-            AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarms.cancel(recurringLl24);
-            recurringLl24.cancel();
-        }
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        recurringLl24.cancel();
+        alarms.cancel(recurringLl24);
     }
     public static void changeProfile(Context context) {
         AudioManager am;

@@ -397,6 +397,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         checkinViews();
         AttendanceUtils.checkinGuard(getContext());
         AppUtils.startPulse(getContext());
+        AttendanceUtils.checkinStatusGuard(getContext());
         mLoadingDialog.dismiss();
     }
 
@@ -411,6 +412,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     public void onCheckoutSuccess() {
         checkoutViews();
         AttendanceUtils.checkoutGuard(getContext());
+        AttendanceUtils.checkoutStatusGuard(getContext());
         mLoadingDialog.dismiss();
     }
 

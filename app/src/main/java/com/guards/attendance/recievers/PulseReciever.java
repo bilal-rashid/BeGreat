@@ -12,6 +12,7 @@ import com.guards.attendance.fragments.AlarmFragment;
 import com.guards.attendance.service.RSSPullService;
 import com.guards.attendance.utils.ActivityUtils;
 import com.guards.attendance.utils.AppUtils;
+import com.guards.attendance.utils.AttendanceUtils;
 import com.guards.attendance.utils.LoginUtils;
 
 import static android.content.Context.POWER_SERVICE;
@@ -25,11 +26,13 @@ public class PulseReciever extends BroadcastReceiver{
     public void onReceive(Context context, Intent intent) {
         Log.d("TAAAG","recieved");
         if(LoginUtils.isGuardUserLogin(context)) {
-            PowerManager.WakeLock screenLock = ((PowerManager) context.getSystemService(POWER_SERVICE)).newWakeLock(
-                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-            screenLock.acquire(5000);
-            AppUtils.vibrate(context);
-            ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(), null, false);
+            if(AttendanceUtils.isGuardStatusCheckin(context)) {
+                PowerManager.WakeLock screenLock = ((PowerManager) context.getSystemService(POWER_SERVICE)).newWakeLock(
+                        PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+                screenLock.acquire(5000);
+                AppUtils.vibrate(context);
+                ActivityUtils.startAlarmActivity(context, FrameActivity.class, AlarmFragment.class.getName(), null, false);
+            }
         }else if (LoginUtils.isAdminUserLogin(context)){
             Intent cbIntent =  new Intent();
             cbIntent.setClass(context, RSSPullService.class);
