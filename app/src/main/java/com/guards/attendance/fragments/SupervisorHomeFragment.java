@@ -46,6 +46,8 @@ import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.AttendanceUtils;
 import com.guards.attendance.utils.LoginUtils;
 
+import dmax.dialog.SpotsDialog;
+
 /**
  * Created by Bilal Rashid on 2/24/2018.
  */
@@ -64,7 +66,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
-
+    SpotsDialog mLoadingDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,8 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
             mHolder.commentEditText.setEnabled(false);
             mHolder.inputLayoutComment.setHintEnabled(false);
         }
+        mLoadingDialog  = new SpotsDialog(getContext());
+        mLoadingDialog.setCancelable(false);
     }
 
     private void buildAlertMessageNoGps() {
@@ -192,7 +196,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKIN);
                                         }else {
-                                            mHolder.progressBar.setVisibility(View.VISIBLE);
                                             checkinViews();
                                             AttendanceUtils.checkinSupervisor(getContext());
                                             startLocationUpdates();
@@ -232,7 +235,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKOUT);
                                         }else {
-                                            mHolder.progressBar.setVisibility(View.VISIBLE);
                                             checkoutViews();
                                             AttendanceUtils.checkoutSupervisor(getContext());
                                             startLocationUpdates();
@@ -311,20 +313,20 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     @Override
     public void onCheckinSuccess() {
         checkinViews();
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
     }
 
     @Override
     public void onCheckinFailure() {
         AttendanceUtils.checkoutSupervisor(getContext());
         checkoutViews();
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
         AppUtils.showSnackBar(getView(),"Checkin Failed! Please recharge credit");
     }
 
     @Override
     public void onCheckoutSuccess() {
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
         checkoutViews();
     }
 
@@ -332,8 +334,18 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     public void onCheckoutFailure() {
         AttendanceUtils.checkinSupervisor(getContext());
         checkinViews();
-        mHolder.progressBar.setVisibility(View.GONE);
         AppUtils.showSnackBar(getView(),"Checkout Failed! Please recharge credit");
+        mLoadingDialog.dismiss();
+    }
+
+    @Override
+    public void onMessageSuccess() {
+
+    }
+
+    @Override
+    public void onMessageFailure() {
+
     }
 
     public static class ViewHolder {
@@ -342,7 +354,7 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
         CardView checkinCard, checkoutCard, logoutCard;
         TextInputEditText commentEditText;
         TextInputLayout inputLayoutComment;
-        ProgressBar progressBar;
+        ProgressBar progressBarr;
 
         public ViewHolder(View view) {
             profileImage = (ImageView) view.findViewById(R.id.image_profile);
@@ -354,8 +366,8 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
             logoutCard = (CardView) view.findViewById(R.id.card_logout);
             commentEditText = (TextInputEditText) view.findViewById(R.id.edit_text_comment);
             inputLayoutComment = (TextInputLayout) view.findViewById(R.id.input_layout_comment);
-
-            progressBar = (ProgressBar) view.findViewById(R.id.progress_message);
+            progressBarr = (ProgressBar) view.findViewById(R.id.progress_message);
+            progressBarr.setVisibility(View.GONE);
         }
 
     }
@@ -373,7 +385,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKIN);
                     }else {
-                        mHolder.progressBar.setVisibility(View.VISIBLE);
                         checkinViews();
                         AttendanceUtils.checkinSupervisor(getContext());
                         startLocationUpdates();
@@ -395,7 +406,6 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKOUT);
                     }else {
-                        mHolder.progressBar.setVisibility(View.VISIBLE);
                         checkoutViews();
                         AttendanceUtils.checkoutSupervisor(getContext());
                         startLocationUpdates();
@@ -471,6 +481,9 @@ public class SupervisorHomeFragment extends Fragment implements View.OnClickList
     }
 
     protected void startLocationUpdates() {
+        if(mLoadingDialog!=null){
+            mLoadingDialog.show();
+        }
 
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();
