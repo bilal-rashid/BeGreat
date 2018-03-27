@@ -157,6 +157,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                         switch (view.getId()) {
                             case R.id.button_positive:
                                 LoginUtils.logout(getContext());
+                                AppUtils.stopPulse(getContext());
                                 ActivityUtils.startHomeActivity(getContext(), FrameActivity.class, null);
                                 mSimpleDialog.dismiss();
                                 break;
