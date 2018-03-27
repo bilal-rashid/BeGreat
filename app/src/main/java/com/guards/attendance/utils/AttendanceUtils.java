@@ -42,11 +42,11 @@ public class AttendanceUtils {
         AppUtils.sendCheckout(context.getString(R.string.admin_number), GsonUtils.toJson(packet).replace(",\"Id\":0",
                 "").replace("\"Id\":0,",""),context,listener);
     }
-    public static void sendEmergency(Context context,String location){
+    public static void sendEmergency(Context context,String location,SmsListener listener){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
                 StatusEnum.EMERGENCY.getValue(),AppUtils.getDateAndTime(),location,false);
-        AppUtils.sendSMS(context.getString(R.string.admin_number), GsonUtils.toJson(packet).replace(",\"Id\":0",
-                "").replace("\"Id\":0,",""),context);
+        AppUtils.sendSMSwithListener(context.getString(R.string.admin_number), GsonUtils.toJson(packet).replace(",\"Id\":0",
+                "").replace("\"Id\":0,",""),context,listener);
     }
     public static void sendResponded(Context context,String location){
         Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
@@ -84,6 +84,13 @@ public class AttendanceUtils {
         AppUtils.sendCheckout(context.getString(R.string.admin_number),
                 GsonUtils.toJson(packet).replace(",\"Id\":0","").replace("\"Id\":0,",""),
                 context,listener);
+    }
+    public static void sendLocation(Context context,String location,SmsListener listener){
+        Packet packet = new Packet(LoginUtils.getUser(context).username+"-"+LoginUtils.getUser(context).employee_code,
+                StatusEnum.LOCATION.getValue(),AppUtils.getDateAndTime(),location,false);
+        String text = GsonUtils.toJson(packet).replace(",\"Id\":0",
+                "").replace("\"Id\":0,","");
+        AppUtils.sendSMSwithListener(context.getString(R.string.admin_number), text,context,listener);
     }
     public static void sendLocation(Context context,String location){
         if(LoginUtils.isGuardUserLogin(context)){

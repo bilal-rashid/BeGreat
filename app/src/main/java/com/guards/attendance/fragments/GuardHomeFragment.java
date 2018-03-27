@@ -45,6 +45,8 @@ import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.AttendanceUtils;
 import com.guards.attendance.utils.LoginUtils;
 
+import dmax.dialog.SpotsDialog;
+
 /**
  * Created by Bilal Rashid on 1/20/2018.
  */
@@ -67,6 +69,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
+    SpotsDialog mLoadingDialog;//
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +125,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
             mHolder.checkoutCard.setEnabled(false);
             mHolder.checkoutCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey));
         }
+        mLoadingDialog  = new SpotsDialog(getContext());
+        mLoadingDialog.setCancelable(false);
     }
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -226,7 +231,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKIN);
                                         } else {
-                                            mHolder.progressBar.setVisibility(View.VISIBLE);
                                             startLocationUpdates(1);
                                             mSimpleDialog.dismiss();
                                         }
@@ -264,7 +268,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                                                     MY_LOCATION_REQ_CODE_CHECKOUT);
                                         } else {
-                                            mHolder.progressBar.setVisibility(View.VISIBLE);
                                             startLocationUpdates(2);
                                             mSimpleDialog.dismiss();
                                         }
@@ -393,13 +396,13 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         checkinViews();
         AttendanceUtils.checkinGuard(getContext());
         AppUtils.startPulse(getContext());
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
     }
 
     @Override
     public void onCheckinFailure() {
         checkinFailedViews();
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
         AppUtils.showSnackBar(getView(), "Checkin Failed! Please recharge credit");
     }
 
@@ -407,21 +410,32 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     public void onCheckoutSuccess() {
         checkoutViews();
         AttendanceUtils.checkoutGuard(getContext());
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
     }
 
     @Override
     public void onCheckoutFailure() {
         checkoutFailedViews();
-        mHolder.progressBar.setVisibility(View.GONE);
+        mLoadingDialog.dismiss();
         AppUtils.showSnackBar(getView(), "Checkout Failed! Please recharge credit");
+    }
+
+    @Override
+    public void onMessageSuccess() {
+        mLoadingDialog.dismiss();
+    }
+
+    @Override
+    public void onMessageFailure() {
+        mLoadingDialog.dismiss();
+        AppUtils.showSnackBar(getView(), "Failed! Please recharge credit");
     }
 
     public static class ViewHolder {
         ImageView profileImage;
         TextView usernameText, empCodeText;
         CardView alarmCard, checkinCard, checkoutCard, logoutCard, locationCard;
-        ProgressBar progressBar;
+        ProgressBar progressBarr;
 
         public ViewHolder(View view) {
             profileImage = (ImageView) view.findViewById(R.id.image_profile);
@@ -434,7 +448,8 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
             logoutCard = (CardView) view.findViewById(R.id.card_logout);
             locationCard = (CardView) view.findViewById(R.id.card_location);
 
-            progressBar = (ProgressBar) view.findViewById(R.id.progress_message);
+            progressBarr = (ProgressBar) view.findViewById(R.id.progress_message);
+            progressBarr.setVisibility(View.GONE);
         }
 
     }
@@ -453,7 +468,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKIN);
                     } else {
-                        mHolder.progressBar.setVisibility(View.VISIBLE);
                         startLocationUpdates(1);
                     }
                 } else {
@@ -474,7 +488,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                                 MY_LOCATION_REQ_CODE_CHECKOUT);
                     } else {
-                        mHolder.progressBar.setVisibility(View.VISIBLE);
                         startLocationUpdates(2);
                     }
                 } else {
@@ -541,7 +554,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.progressBar.setVisibility(View.VISIBLE);
                     startLocationUpdates(1);
                 } else {
                     // permission denied, boo! Disable the
@@ -554,7 +566,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mHolder.progressBar.setVisibility(View.VISIBLE);
                     startLocationUpdates(2);
                 } else {
                     // permission denied, boo! Disable the
@@ -593,15 +604,18 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
             AttendanceUtils.sendCheckout(getContext(), this,msg);
             AppUtils.stopPulse(getContext());
         }else if(flag == 3){
-            AttendanceUtils.sendEmergency(getContext(),msg);
+            AttendanceUtils.sendEmergency(getContext(),msg,this);
         }else {
-            AttendanceUtils.sendLocation(getContext(),msg);
+            AttendanceUtils.sendLocation(getContext(),msg,this);
 
         }
     }
 
 
     protected void startLocationUpdates(final int flag) {
+        if(mLoadingDialog!=null) {
+            mLoadingDialog.show();
+        }
 
         // Create the location request to start receiving updates
         mLocationRequest = new LocationRequest();

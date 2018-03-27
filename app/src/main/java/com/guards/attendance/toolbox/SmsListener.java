@@ -9,4 +9,6 @@ public interface SmsListener {
     public void onCheckinFailure();
     public void onCheckoutSuccess();
     public void onCheckoutFailure();
+    public void onMessageSuccess();
+    public void onMessageFailure();
 }

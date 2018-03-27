@@ -159,6 +159,56 @@ public class AppUtils {
         // Vibrate for 500 milliseconds
         v.vibrate(1000);
     }
+    public static void sendSMSwithListener(String phoneNo, String msg, final Context context, final SmsListener listener) {
+        try {
+            String SENT = "SMS_SENT";
+            String DELIVERED = "SMS_DELIVERED";
+
+            PendingIntent sentPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(SENT), 0);
+
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(DELIVERED), 0);
+
+            //---when the SMS has been sent---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            Toast.makeText(context, "SMS sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onMessageSuccess();
+                            break;
+                        default:
+                            Toast.makeText(context, "Failed! sms not sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onMessageFailure();
+                            break;
+                    }
+                }
+            }, new IntentFilter(SENT));
+
+            //---when the SMS has been delivered---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            break;
+                    }
+                }
+            }, new IntentFilter(DELIVERED));
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, sentPI, deliveredPI);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     public static void sendSMS(String phoneNo, String msg,final Context context) {
         try {
             String SENT = "SMS_SENT";
