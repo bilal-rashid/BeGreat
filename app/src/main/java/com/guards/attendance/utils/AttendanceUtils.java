@@ -122,15 +122,4 @@ public class AttendanceUtils {
             AppUtils.sendSMS(context.getString(R.string.admin_number), text);
         }
     }
-
-
-    public static void checkinStatusGuard(Context context){
-        PrefUtils.persistBoolean(context,Constants.GUARD_CHECKIN,true);
-    }
-    public static boolean isGuardStatusCheckin(Context context){
-        return  PrefUtils.getBoolean(context,Constants.GUARD_CHECKIN,false);
-    }
-    public static void checkoutStatusGuard(Context context){
-        PrefUtils.persistBoolean(context,Constants.GUARD_CHECKIN,false);
-    }
 }

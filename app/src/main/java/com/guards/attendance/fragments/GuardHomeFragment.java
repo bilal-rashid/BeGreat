@@ -22,11 +22,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -69,6 +67,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     private long UPDATE_INTERVAL = 1000;  /* 1 sec */
     private long FASTEST_INTERVAL = 500; /* 1/2 sec */
     public static int counter = 0;
+    public int message_counter;
     SpotsDialog mLoadingDialog;//
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,6 +126,7 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         }
         mLoadingDialog  = new SpotsDialog(getContext());
         mLoadingDialog.setCancelable(false);
+        message_counter = 0;
     }
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -394,11 +394,13 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onCheckinSuccess() {
-        checkinViews();
-        AttendanceUtils.checkinGuard(getContext());
-        AppUtils.startPulse(getContext());
-        AttendanceUtils.checkinStatusGuard(getContext());
-        mLoadingDialog.dismiss();
+        message_counter++;
+        if(message_counter == 1) {
+            checkinViews();
+            AttendanceUtils.checkinGuard(getContext());
+            AppUtils.startPulse(getContext());
+            mLoadingDialog.dismiss();
+        }
     }
 
     @Override
@@ -412,7 +414,6 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
     public void onCheckoutSuccess() {
         checkoutViews();
         AttendanceUtils.checkoutGuard(getContext());
-        AttendanceUtils.checkoutStatusGuard(getContext());
         mLoadingDialog.dismiss();
     }
 
