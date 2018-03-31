@@ -267,6 +267,16 @@ public class AppUtils {
         alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.INTERVAL,
                 Constants.INTERVAL, recurringLl24);
     }
+    public static void startPulseAfterBoot(Context context) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Intent ll24 = new Intent(context, PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.INTERVAL_20_MIN,
+                Constants.INTERVAL, recurringLl24);
+    }
     public static void startAdminPulse(Context context) {
         Calendar calendar = Calendar.getInstance();
 
