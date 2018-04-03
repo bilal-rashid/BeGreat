@@ -133,7 +133,11 @@ public class GuardDetailsFragment extends Fragment implements OnItemClickListene
         if(packet.status.equals(StatusEnum.NO_LOCATION.getValue())){
             AppUtils.showSnackBar(getView(),"Location not provided");
         }else {
-            ActivityUtils.startActivity(getActivity(), MapsActivity.class,bundle);
+            if(packet.getPoint().contains("noGps")){
+                AppUtils.showSnackBar(getView(),"Location not provided");
+            }else {
+                ActivityUtils.startActivity(getActivity(), MapsActivity.class,bundle);
+            }
         }
 
     }
