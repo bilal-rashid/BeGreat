@@ -122,4 +122,15 @@ public class AttendanceUtils {
             AppUtils.sendSMS(context.getString(R.string.admin_number), text);
         }
     }
+    public static void saveLastLocation(Context context,String loc){
+        PrefUtils.persistString(context, Constants.LAST_LOCATION,loc);
+    }
+    public static String getLastLocation(Context context){
+        String lastLocation = PrefUtils.getString(context,Constants.LAST_LOCATION);
+        if(lastLocation!=null){
+            return lastLocation;
+        }else {
+            return "noGps_13.679407_171.080469";
+        }
+    }
 }

@@ -600,6 +600,10 @@ public class GuardHomeFragment extends Fragment implements View.OnClickListener,
         String msg = "location" + "_" +
                 Double.toString(location.getLatitude()) + "_" +
                 Double.toString(location.getLongitude());
+        String last_location = "noGps" + "_" +
+                Double.toString(location.getLatitude()) + "_" +
+                Double.toString(location.getLongitude());
+        AttendanceUtils.saveLastLocation(getContext(),last_location);
         if(flag == 1){
             checkinViews();
             AttendanceUtils.sendCheckin(getContext(), this,msg);

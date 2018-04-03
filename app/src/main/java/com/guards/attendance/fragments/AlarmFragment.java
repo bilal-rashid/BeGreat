@@ -59,7 +59,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
                     mHolder.proSwipeBtn.showResultIcon(false);
                     final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        AttendanceUtils.sendNotResponded(getContext(),"noGps_13.679407_171.080469");
+                        AttendanceUtils.sendNotResponded(getContext(),AttendanceUtils.getLastLocation(getContext()));
                         getActivity().finish();
                     } else {
                         startLocationUpdates(false);
@@ -109,7 +109,7 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
         mHandler.removeCallbacks(mRunnable);
         final LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            AttendanceUtils.sendResponded(getContext(),"noGps_13.679407_171.080469");
+            AttendanceUtils.sendResponded(getContext(),AttendanceUtils.getLastLocation(getContext()));
             getActivity().finish();
         } else {
             startLocationUpdates(true);
@@ -167,6 +167,10 @@ public class AlarmFragment extends Fragment implements ProSwipeButton.OnSwipeLis
         counter = 0;
         String loc = "location" + "_" +Double.toString(location.getLatitude()) + "_" +
                 Double.toString(location.getLongitude());
+        String loc_temp = "noGps" + "_" +Double.toString(location.getLatitude()) + "_" +
+                Double.toString(location.getLongitude());
+        AttendanceUtils.saveLastLocation(getContext(),loc_temp);
+
         if(isResponded){
             AttendanceUtils.sendResponded(getContext(),loc);
         }else {

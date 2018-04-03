@@ -25,5 +25,6 @@ public class Constants {
     public static final String GUARD_DATA = "guard_data";
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String DB_ID = "db_id";
+    public static final String LAST_LOCATION = "last_location";
 
 }
