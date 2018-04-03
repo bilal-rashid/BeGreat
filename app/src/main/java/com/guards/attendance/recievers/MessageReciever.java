@@ -20,6 +20,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.SettingsClient;
 import com.guards.attendance.FrameActivity;
+import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.fragments.EmergencyFragment;
 import com.guards.attendance.models.Packet;
@@ -87,7 +88,7 @@ public class MessageReciever extends BroadcastReceiver {
                 }
             }
             if(LoginUtils.isGuardUserLogin(context) || LoginUtils.isSupervisorUserLogin(context)){
-                if(message.contains("abcdefgh")){
+                if(message.contains(context.getString(R.string.generic_msg))){
                     final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                     if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         AttendanceUtils.sendGpsOFF(context);

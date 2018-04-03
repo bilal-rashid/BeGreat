@@ -168,7 +168,7 @@ public class SupervisorDetailsFragment extends Fragment implements OnItemClickLi
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_get_location:
-                AppUtils.sendSMS(mGuard.number,"abcdefghij",getContext());
+                AppUtils.sendSMS(mGuard.number,getContext().getString(R.string.generic_msg),getContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
