@@ -115,7 +115,7 @@ public class DatabaseUtils {
         return guardList;
     }
     public List<Packet> getPacketsToSync(int id){
-        List<Packet> result = dataBase.packetDao().getPacketsToSync(id, StatusEnum.LOCATION.getValue(),
+        List<Packet> result = dataBase.packetDao().getPacketsToSync(id, "45",
                 StatusEnum.NO_LOCATION.getValue());
         return result;
     }
