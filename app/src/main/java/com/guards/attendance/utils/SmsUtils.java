@@ -108,7 +108,7 @@ public class SmsUtils {
                     if (strbody.contains("\"" + Constants.UNIQUE_ID_GUARD + "\"")) {
                         Packet temp_packet = GsonUtils.fromJson(strbody, Packet.class);
                         Date lastweek = new Date(Calendar.getInstance().getTime().getTime() - (7L * 24L * 60L * 60L * 1000L));
-                        Date packetDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(temp_packet.date_time);
+                        Date packetDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(temp_packet.date_time);
                         if(lastweek.compareTo(packetDate)<1){
                             packets.add(GsonUtils.fromJson(strbody, Packet.class));
                         }

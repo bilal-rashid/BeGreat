@@ -29,6 +29,7 @@ import com.guards.attendance.dialog.SimpleDialog;
 import com.guards.attendance.models.Guard;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.models.ResponseModel;
+import com.guards.attendance.toolbox.ObservableObject;
 import com.guards.attendance.toolbox.OnItemClickListener;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.ActivityUtils;
@@ -39,6 +40,8 @@ import com.guards.attendance.utils.LoginUtils;
 import com.guards.attendance.utils.SmsUtils;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,24 +51,12 @@ import retrofit2.Response;
  * Created by Bilal Rashid on 2/26/2018.
  */
 
-public class AdminSupervisorsFragment  extends Fragment implements View.OnClickListener, OnItemClickListener {
+public class AdminSupervisorsFragment  extends Fragment implements View.OnClickListener, OnItemClickListener,Observer {
 
     private ViewHolder mHolder;
     private List<Guard> mGuardList;
     private SimpleDialog mSimpleDialog;
     private GuardAdapter mGuardAdapter;
-    private Handler mHandler;
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                mHandler.removeCallbacks(mRunnable);
-                Syncdata();
-            } catch (Exception e) {
-            }
-
-        }
-    };
     AppDataBase database;
 
     @Override
@@ -89,10 +80,7 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
         super.onViewCreated(view, savedInstanceState);
         mHolder = new ViewHolder(view);
         mHolder.progressBar.setVisibility(View.GONE);
-        mHandler = new Handler();
         database = AppDataBase.getAppDatabase(getContext());
-        getMessagesAndPopulateList();
-
     }
 
     private static final int MY_WRITE_EXTERNAL_STORAGE_PERMISSION_REQUEST_CODE = 3;
@@ -141,6 +129,25 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
     public void onClick(View view) {
 
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        ObservableObject.getInstance().deleteObserver(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_SMS},
+                    45);
+        } else {
+            DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
+        }
+        getMessagesAndPopulateList();
+        ObservableObject.getInstance().addObserver(this);
+    }
 
     @Override
     public void onItemClick(View view, Object data, int position) {
@@ -148,6 +155,18 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
         Bundle bundle = new Bundle();
         bundle.putString(Constants.GUARD_DATA, GsonUtils.toJson(guard));
         ActivityUtils.startActivity(getActivity(), FrameActivity.class, SupervisorDetailsFragment.class.getName(), bundle);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_SMS},
+                    45);
+        } else {
+            DatabaseUtils.with(database).addPacketsToDB(SmsUtils.getAllPackets(getContext()));
+        }
+        getMessagesAndPopulateList();
     }
 
     public static class ViewHolder {
@@ -181,6 +200,7 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
                         switch (view.getId()) {
                             case R.id.button_positive:
                                 LoginUtils.logout(getContext());
+                                AppUtils.stopPulse(getContext());
                                 ActivityUtils.startHomeActivity(getContext(), FrameActivity.class, null);
                                 mSimpleDialog.dismiss();
                                 break;
@@ -193,45 +213,12 @@ public class AdminSupervisorsFragment  extends Fragment implements View.OnClickL
                 mSimpleDialog.show();
                 return true;
             case R.id.action_sync:
-                if (AppUtils.isInternetAvailable(getContext())) {
-                    mHolder.progressBar.setVisibility(View.VISIBLE);
-                    mHandler.postDelayed(mRunnable, 100);
-                } else {
-                    AppUtils.makeToast(getContext(), "Internet not Available");
-                }
+                AppUtils.stopPulse(getContext());
+                AppUtils.startAdminPulse(getContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void Syncdata() {
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-        List<Packet> list = DatabaseUtils.with(database).getLastWeekPackets();
-        if (list.size() > 0) {
-            Call<ResponseModel> call = apiService.TEST(list);
-            call.enqueue(new Callback<ResponseModel>() {
-                @Override
-                public void onResponse(Call<ResponseModel> call, Response<ResponseModel> response) {
-                    mHolder.progressBar.setVisibility(View.GONE);
-                    if (response.body().Status) {
-                        AppUtils.showSnackBar(getView(), "Sync Completed Successfully");
-                    } else {
-                        AppUtils.showSnackBar(getView(), "UnSuccessful");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseModel> call, Throwable t) {
-                    mHolder.progressBar.setVisibility(View.GONE);
-                    AppUtils.showSnackBar(getView(), "Some Error Occurred");
-                }
-            });
-        } else {
-            AppUtils.showSnackBar(getView(), "Data not available");
-        }
-
     }
 
     @Override

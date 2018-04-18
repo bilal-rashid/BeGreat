@@ -12,6 +12,7 @@ import com.guards.attendance.R;
 import com.guards.attendance.enumerations.StatusEnum;
 import com.guards.attendance.models.Packet;
 import com.guards.attendance.toolbox.OnItemClickListener;
+import com.guards.attendance.utils.Constants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
     OnItemClickListener mItemclickListener;
 
     public PacketsAdapter(OnItemClickListener onItemClickListener) {
-        format = new SimpleDateFormat("dd/MM/yy HH:mm");
+        format = new SimpleDateFormat(Constants.DATE_FORMAT);
         this.mItemclickListener = onItemClickListener;
     }
 
@@ -66,8 +67,13 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_responded));
         }else if (mItems.get(position).status.equals(StatusEnum.NO_RESPONSE.getValue())){
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_not_responded));
-        }else {
+        }else if (mItems.get(position).status.equals(StatusEnum.EMERGENCY.getValue())){
             holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_emergency));
+        }else if (mItems.get(position).status.equals(StatusEnum.LOCATION.getValue())){
+            holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_location));
+        }
+        else {
+            holder.layout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(),R.color.color_no_gps));
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +97,14 @@ public class PacketsAdapter extends RecyclerView.Adapter<PacketsAdapter.ViewHold
         else if(status.equals(StatusEnum.RESPONSE.getValue())){
             return StatusEnum.RESPONSE.getName();
         }
-        else {
+        else if(status.equals(StatusEnum.NO_RESPONSE.getValue())){
             return StatusEnum.NO_RESPONSE.getName();
+        }
+        else if(status.equals(StatusEnum.LOCATION.getValue())){
+            return StatusEnum.LOCATION.getName();
+        }
+        else {
+            return StatusEnum.NO_LOCATION.getName();
         }
     }
 

@@ -9,7 +9,9 @@ public enum StatusEnum {
     CHECKIN("Checkin","2"),
     CHECKOUT("Checkout","3"),
     RESPONSE("Responded","4"),
-    NO_RESPONSE("Not Responded","5");
+    NO_RESPONSE("Not Responded","5"),
+    LOCATION("Location","6"),
+    NO_LOCATION("Gps Off","7");
 
     private String name;
     private String value;

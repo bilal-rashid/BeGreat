@@ -1,13 +1,16 @@
 package com.guards.attendance.fragments;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import com.guards.attendance.R;
 import com.guards.attendance.adapters.PagerAdapter;
 import com.guards.attendance.database.AppDataBase;
 import com.guards.attendance.database.DatabaseUtils;
+import com.guards.attendance.recievers.PulseReciever;
 import com.guards.attendance.toolbox.ToolbarListener;
 import com.guards.attendance.utils.AppUtils;
 import com.guards.attendance.utils.SmsUtils;
@@ -48,6 +52,7 @@ public class AdminFragment extends Fragment{
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        AppUtils.putDbID(getContext());
         mHolder = new ViewHolder(view);
         database = AppDataBase.getAppDatabase(getContext());
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
@@ -67,6 +72,16 @@ public class AdminFragment extends Fragment{
                 pagerAdapter.notifyDataSetChanged();
             }
         });
+        Intent ll24 = new Intent(getContext(), PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(getContext(), 0, ll24,
+                PendingIntent.FLAG_NO_CREATE);
+        if(recurringLl24 != null){
+            Log.d("TAAAG","not null");
+        }
+        else {
+            Log.d("TAAAG","null");
+            AppUtils.startAdminPulse(getContext());
+        }
 
     }
     private void setupViewPager(ViewPager viewPager) {

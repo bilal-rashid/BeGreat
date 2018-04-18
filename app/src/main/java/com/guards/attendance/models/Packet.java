@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
 import com.guards.attendance.utils.Constants;
 
 import java.text.ParseException;
@@ -16,17 +17,29 @@ import java.util.Date;
 @Entity
 public class Packet {
     @PrimaryKey(autoGenerate = true)
+    @SerializedName("Id")
     public int packetId;
+
+    @SerializedName("EmpType")
     @ColumnInfo(name = "u_id")
     public String u_id;
+
+    @SerializedName("EmpCode")
     @ColumnInfo(name = "emp_id")
     public String emp_id;
+
+    @SerializedName("Status")
     @ColumnInfo(name = "status")
     public String status;
+
+    @SerializedName("AttendanceAt")
     @ColumnInfo(name = "date_time")
     public String date_time;
+
+    @SerializedName("Point")
     @ColumnInfo(name = "point")
     public String point;
+
     @ColumnInfo(name = "number")
     public String number;
 
@@ -100,8 +113,8 @@ public class Packet {
         Date packetDate = null;
         Date thisDate= null;
         try {
-            packetDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(packet.date_time);
-            thisDate = new SimpleDateFormat("dd/MM/yy HH:mm").parse(this.date_time);
+            packetDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(packet.date_time);
+            thisDate = new SimpleDateFormat(Constants.DATE_FORMAT).parse(this.date_time);
             return thisDate.compareTo(packetDate);
         } catch (ParseException e) {
             e.printStackTrace();

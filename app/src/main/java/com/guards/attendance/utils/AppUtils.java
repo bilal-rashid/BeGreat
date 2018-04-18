@@ -151,13 +151,63 @@ public class AppUtils {
     }
     public static String getDateAndTime(){
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
+        SimpleDateFormat df = new SimpleDateFormat(Constants.DATE_FORMAT);
         return df.format(c.getTime());
     }
     public static void vibrate(Context context){
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
         v.vibrate(1000);
+    }
+    public static void sendSMSwithListener(String phoneNo, String msg, final Context context, final SmsListener listener) {
+        try {
+            String SENT = "SMS_SENT";
+            String DELIVERED = "SMS_DELIVERED";
+
+            PendingIntent sentPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(SENT), 0);
+
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(DELIVERED), 0);
+
+            //---when the SMS has been sent---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            Toast.makeText(context, "SMS sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onMessageSuccess();
+                            break;
+                        default:
+                            Toast.makeText(context, "Failed! sms not sent",
+                                    Toast.LENGTH_SHORT).show();
+                            listener.onMessageFailure();
+                            break;
+                    }
+                }
+            }, new IntentFilter(SENT));
+
+            //---when the SMS has been delivered---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            break;
+                    }
+                }
+            }, new IntentFilter(DELIVERED));
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, sentPI, deliveredPI);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     public static void sendSMS(String phoneNo, String msg,final Context context) {
         try {
@@ -217,6 +267,26 @@ public class AppUtils {
         alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.INTERVAL,
                 Constants.INTERVAL, recurringLl24);
     }
+    public static void startPulseAfterBoot(Context context) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Intent ll24 = new Intent(context, PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.INTERVAL_20_MIN,
+                Constants.INTERVAL, recurringLl24);
+    }
+    public static void startAdminPulse(Context context) {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        Intent ll24 = new Intent(context, PulseReciever.class);
+        PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarms.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() + Constants.ADMIN_INTERVAL,
+                Constants.ADMIN_INTERVAL, recurringLl24);
+    }
     public static void stopPulse(Context context) {
         Calendar calendar = Calendar.getInstance();
 
@@ -224,6 +294,7 @@ public class AppUtils {
         Intent ll24 = new Intent(context, PulseReciever.class);
         PendingIntent recurringLl24 = PendingIntent.getBroadcast(context, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        recurringLl24.cancel();
         alarms.cancel(recurringLl24);
     }
     public static void changeProfile(Context context) {
@@ -357,4 +428,70 @@ public class AppUtils {
             ex.printStackTrace();
         }
     }
+
+    public static void sendNormalText(String phoneNo, String msg, final Context context) {
+        try {
+            String SENT = "SMS_SENT";
+            String DELIVERED = "SMS_DELIVERED";
+
+            PendingIntent sentPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(SENT), 0);
+
+            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 0,
+                    new Intent(DELIVERED), 0);
+
+            //---when the SMS has been sent---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }, new IntentFilter(SENT));
+
+            //---when the SMS has been delivered---
+            context.registerReceiver(new BroadcastReceiver(){
+                @Override
+                public void onReceive(Context arg0, Intent arg1) {
+                    switch (getResultCode())
+                    {
+                        case Activity.RESULT_OK:
+                            break;
+                        case Activity.RESULT_CANCELED:
+                            break;
+                    }
+                }
+            }, new IntentFilter(DELIVERED));
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, "dsdsdsd", sentPI, deliveredPI);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public static void sendSMS(String phoneNo, String msg) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, msg, null, null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void putDbID(Context context) {
+        long temp = PrefUtils.getLong(context,Constants.DB_ID,1);
+        if(temp == 1){
+            Calendar c = Calendar.getInstance();
+            long id = c.getTime().getTime();
+            PrefUtils.persistLong(context,Constants.DB_ID,id);
+        }
+    }
+    public static long getDbId(Context context){
+        return PrefUtils.getLong(context,Constants.DB_ID,1);
+    }
+
 }

@@ -5,6 +5,8 @@ package com.guards.attendance.models;
  */
 
 public class ResponseModel {
-    public boolean Status;
+    public String Status;
     public String Message;
+    public int Code;
+    public Packet Result;
 }
